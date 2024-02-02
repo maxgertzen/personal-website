@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Josefin Sans Fonts */
+@font-face {
+  font-family: 'Josefin Sans';
+  src: url('/fonts/JosefinSans-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Josefin Sans';
+  src: url('/fonts/JosefinSans-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Josefin Sans';
+  src: url('/fonts/JosefinSans-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Josefin Sans';
+  src: url('/fonts/JosefinSans-Medium.ttf') format('truetype');
+  font-weight: 500; /* Medium weight */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Josefin Sans';
+  src: url('/fonts/JosefinSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Josefin Sans';
+  src: url('/fonts/JosefinSans-Thin.ttf') format('truetype');
+  font-weight: 100; /* Thin weight */
+  font-style: normal;
+}
+
+/* Major Mono Display Font */
+@font-face {
+  font-family: 'Major Mono Display';
+  src: url('/fonts/MajorMonoDisplay-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: normal;
+}
+
+h1 {
+  font-family: 'Major Mono Display';
+  font-size: 3.125rem;
+  line-height: 3.125rem;
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: 'Josefin Sans';
+}
+
+h3 {
+  font-weight: 300;
+}
+
+h5 {
+  font-size: 1.125rem;
+  font-weight: bold;
+}
+
+p {
+  font-weight: 300;
+}
+
+section {
+  position: relative;
+}
+
+.scroller {
+  width: 50px;
+	height: 90px;
+	border: 3px solid #333;
+	border-radius: 60px;
+	position: relative;
+}
+
+.scroll-down {
+	&::before {
+		content: '';
+		width: 12px;
+		height: 12px;
+		position: absolute;
+		bottom: 10px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: #333;
+		border-radius: 50%;
+		opacity: 1;
+		animation: wheel-down 2s infinite;
+		-webkit-animation: wheel-down 2s infinite;
+	}
+}
+
+.scroll-up {
+	&::before {
+		content: '';
+		width: 12px;
+		height: 12px;
+		position: absolute;
+		top: 10px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: #333;
+		border-radius: 50%;
+		opacity: 1;
+		animation: wheel-up 2s infinite;
+		-webkit-animation: wheel-up 2s infinite;
+	}
+}
+
+@keyframes wheel-down {
+	to {
+		opacity: 0;
+		bottom: 75%;
+	}
+}
+
+@-webkit-keyframes wheel-down {
+	to {
+		opacity: 0;
+		bottom: 75%;
+	}
+}
+
+@keyframes wheel-up {
+	to {
+		opacity: 0;
+		top: 80%;
+	}
+}
+
+@-webkit-keyframes wheel-up {
+	to {
+		opacity: 0;
+		bottom: 80%;
+	}
+}
+
+.dark .svg-icon {
+  fill: #fff;
+}
