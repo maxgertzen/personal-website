@@ -1,25 +1,15 @@
-const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
+interface FormValues {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  message: string;
+  isAgreeingToTerms: boolean;
+}
 
-  const target = event.target as typeof event.target & {
-    name: { value: string };
-    phone: { value: string };
-    email: { value: string };
-    message: { value: string };
-    checkbox: { checked: boolean };
-  };
-
-  const formData = {
-    name: target.name.value,
-    phone: target.phone.value,
-    email: target.email.value,
-    message: target.message.value,
-    isSubscribed: target.checkbox.checked,
-  };
-
+const handleSubmit = async (formValues: FormValues) => {
   const response = await fetch('/api/contact', {
     method: 'POST',
-    body: JSON.stringify(formData),
+    body: JSON.stringify(formValues),
     headers: {
       'Content-Type': 'application/json',
     },
