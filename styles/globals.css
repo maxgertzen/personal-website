@@ -255,3 +255,25 @@ footer .arrow {
 .dark .svg-icon {
   fill: #fff;
 }
+
+.animate__wobble-hover:hover {
+  -webkit-animation: wobble 1.1s;
+  animation: wobble 1.1s;
+  animation-duration: 1s;
+}
+
+.animate__pulse-hover:hover {
+  -webkit-animation: pulse 1.1s;
+  animation: pulse 1.1s;
+}
+
+.animate__shakeX-hover:hover {
+  -webkit-animation: shakeX 1.1s;
+  animation: shakeX 1.1s;
+}
+
+.animate__bounce-hover:hover {
+  -webkit-animation: bounce 1.1s;
+  animation: bounce 1.1s;
+  animation-duration: .5s;
+}

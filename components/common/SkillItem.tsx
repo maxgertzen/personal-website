@@ -7,7 +7,7 @@ interface SkillItemProps {
 
 function SkillItem({ icon, title }: SkillItemProps) {
   return (
-    <div
+    <li
       className={`flex flex-col items-center ${
         title === 'Php' ? 'self-center' : ''
       }`}>
@@ -15,7 +15,7 @@ function SkillItem({ icon, title }: SkillItemProps) {
         title,
       })}
       <span className='sr-only'>{title}</span>
-    </div>
+    </li>
   );
 }
 
