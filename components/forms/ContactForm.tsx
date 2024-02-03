@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Input, Textarea, Button, Checkbox } from '@nextui-org/react';
+import submitFormValues from '@/pages/api/submit';
 
 interface FormValues {
   name: string;
@@ -20,7 +21,7 @@ const ContactForm: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+    submitFormValues(data);
   };
 
   return (
