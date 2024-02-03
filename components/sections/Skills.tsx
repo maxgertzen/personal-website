@@ -9,7 +9,7 @@ import MusicSkills from '../skills/MusicSkills';
 const Skills: React.FC = () => {
   return (
     <Section id='skills' className='text-center px-16'>
-      <h2>Skills</h2>
+      <h2 className='sm:text-4xl'>Skills</h2>
       <Spacer y={8} />
       <CmsSkills />
       <Spacer y={8} />
