@@ -1,16 +1,15 @@
 import React from 'react';
 import Section from '../common/Section';
+import ContactForm from '../forms/ContactForm';
+import { Spacer } from '@nextui-org/react';
 
 const Contact: React.FC = () => {
   return (
-    <Section id='contact'>
+    <Section id='contact' className='w-[80%] m-auto'>
       <h2>Contact</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
-      </p>
+      <Spacer y={4} />
+      <ContactForm />
+      <Spacer y={8} />
     </Section>
   );
 };
