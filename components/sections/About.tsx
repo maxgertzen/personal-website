@@ -5,6 +5,7 @@ import { Spacer } from '@nextui-org/react';
 const About: React.FC = () => {
   return (
     <Section id='about' className='m-auto text-center max-w-[80%]'>
+      <Spacer y={8} />
       <h2>About</h2>
       <Spacer y={8} />
       <p className='leading-8'>

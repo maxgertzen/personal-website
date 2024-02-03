@@ -4,6 +4,7 @@ import Section from '../common/Section';
 const SocialLinks: React.FC = () => {
   return (
     <Section id='social-links'>
+      <h2>Social Links</h2>
       <ul>
         <li>
           <a
