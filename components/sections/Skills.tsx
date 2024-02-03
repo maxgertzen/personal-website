@@ -18,7 +18,7 @@ const Skills: React.FC = () => {
       <BackEndSkills />
       <Spacer y={8} />
       <MusicSkills />
-      <Spacer y={8} />
+      <Spacer y={16} />
     </Section>
   );
 };
