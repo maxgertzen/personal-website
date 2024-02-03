@@ -43,7 +43,7 @@ const socialLinks = [
 const SocialLinks: React.FC = () => {
   return (
     <Section id='social-links'>
-      <h2>Social Links</h2>
+      <h2 className='sm:text-4xl'>Social Links</h2>
       <Spacer y={8} />
       <SocialRow>
         {socialLinks.map((link, index) => (
@@ -56,7 +56,7 @@ const SocialLinks: React.FC = () => {
           />
         ))}
       </SocialRow>
-      <Spacer y={16} />
+      <Spacer y={32} />
     </Section>
   );
 };
