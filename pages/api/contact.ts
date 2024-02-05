@@ -8,11 +8,41 @@ type RequestBody = {
   phoneNumber: string;
   isAgreeingToTerms: boolean;
   message: string;
+  recaptchaToken: string;
 };
 
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+  const response = await fetch(
+    'https://www.google.com/recaptcha/api/siteverify',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `secret=${secret}&response=${token}`,
+    }
+  );
+  const data = await response.json();
+
+  return data.success && data.score > 0.5;
+}
+
 const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { name, email, message, phoneNumber, isAgreeingToTerms }: RequestBody =
-    req.body;
+  const {
+    name,
+    email,
+    message,
+    phoneNumber,
+    isAgreeingToTerms,
+    recaptchaToken,
+  }: RequestBody = req.body;
+
+  const isCaptchaValid = await verifyRecaptcha(recaptchaToken);
+
+  if (!isCaptchaValid) {
+    return res.status(400).json({ error: 'reCAPTCHA verification failed' });
+  }
 
   if (!name || !email || !message || !isAgreeingToTerms) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -21,17 +51,30 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   const sanitizedMessage = xss(message);
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    port: 465,
+    host: 'smtp.gmail.com',
     auth: {
       user: process.env.EMAIL_USERNAME,
       pass: process.env.EMAIL_PASSWORD,
     },
   });
 
+  await new Promise((resolve, reject) => {
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        console.log('Server is ready to take our messages');
+        resolve(success);
+      }
+    });
+  });
+
   const mailOptions = {
-    from: email,
+    from: `"maxgertzen.com" <${process.env.EMAIL_USERNAME}>`,
     to: process.env.EMAIL_USERNAME,
-    subject: `[maxgertzen.com] - New contact form submission from ${name}`,
+    subject: `New contact form submission from ${name}`,
     html: `
       <p>You have a new contact form submission:</p>
       <p><strong>Full Name: </strong> ${name}</p>
