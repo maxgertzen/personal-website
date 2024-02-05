@@ -2,75 +2,47 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 import xss from 'xss';
 
-/* 
-const nodemailer = require("nodemailer");
-
-export default async (req, res) => {
-
-const { firstName, lastName, email, message } = JSON.parse(req.body);
-
-const transporter = nodemailer.createTransport({
-    port: 465,
-    host: "smtp.gmail.com",
-    auth: {
-        user: "myEmail@gmail.com",
-        pass: "password",
-    },
-    secure: true,
-});
-
-await new Promise((resolve, reject) => {
-    // verify connection configuration
-    transporter.verify(function (error, success) {
-        if (error) {
-            console.log(error);
-            reject(error);
-        } else {
-            console.log("Server is ready to take our messages");
-            resolve(success);
-        }
-    });
-});
-
-const mailData = {
-    from: {
-        name: `${firstName} ${lastName}`,
-        address: "myEmail@gmail.com",
-    },
-    replyTo: email,
-    to: "recipient@gmail.com",
-    subject: `form message`,
-    text: message,
-    html: `${message}`,
-};
-
-await new Promise((resolve, reject) => {
-    // send mail
-    transporter.sendMail(mailData, (err, info) => {
-        if (err) {
-            console.error(err);
-            reject(err);
-        } else {
-            console.log(info);
-            resolve(info);
-        }
-    });
-});
-
-res.status(200).json({ status: "OK" });
-};
- */
 type RequestBody = {
   name: string;
   email: string;
   phoneNumber: string;
   isAgreeingToTerms: boolean;
   message: string;
+  recaptchaToken: string;
 };
 
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+  const response = await fetch(
+    'https://www.google.com/recaptcha/api/siteverify',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `secret=${secret}&response=${token}`,
+    }
+  );
+  const data = await response.json();
+
+  return data.success && data.score > 0.5;
+}
+
 const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { name, email, message, phoneNumber, isAgreeingToTerms }: RequestBody =
-    req.body;
+  const {
+    name,
+    email,
+    message,
+    phoneNumber,
+    isAgreeingToTerms,
+    recaptchaToken,
+  }: RequestBody = req.body;
+
+  const isCaptchaValid = await verifyRecaptcha(recaptchaToken);
+
+  if (!isCaptchaValid) {
+    return res.status(400).json({ error: 'reCAPTCHA verification failed' });
+  }
 
   if (!name || !email || !message || !isAgreeingToTerms) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -100,9 +72,9 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   const mailOptions = {
-    from: email,
+    from: `"maxgertzen.com" <${process.env.EMAIL_USERNAME}>`,
     to: process.env.EMAIL_USERNAME,
-    subject: `[maxgertzen.com] - New contact form submission from ${name}`,
+    subject: `New contact form submission from ${name}`,
     html: `
       <p>You have a new contact form submission:</p>
       <p><strong>Full Name: </strong> ${name}</p>
