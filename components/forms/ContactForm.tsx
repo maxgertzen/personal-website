@@ -21,7 +21,14 @@ const ContactForm: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    submitFormValues(data);
+    grecaptcha.ready(function () {
+      grecaptcha
+        .execute(process.env.RECAPTCHA_SITE_KEY ?? '', { action: 'submit' })
+        .then(function (token) {
+          const formData = { ...data, recaptchaToken: token };
+          submitFormValues(formData);
+        });
+    });
   };
 
   return (
