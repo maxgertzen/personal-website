@@ -2,6 +2,64 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 import xss from 'xss';
 
+/* 
+const nodemailer = require("nodemailer");
+
+export default async (req, res) => {
+
+const { firstName, lastName, email, message } = JSON.parse(req.body);
+
+const transporter = nodemailer.createTransport({
+    port: 465,
+    host: "smtp.gmail.com",
+    auth: {
+        user: "myEmail@gmail.com",
+        pass: "password",
+    },
+    secure: true,
+});
+
+await new Promise((resolve, reject) => {
+    // verify connection configuration
+    transporter.verify(function (error, success) {
+        if (error) {
+            console.log(error);
+            reject(error);
+        } else {
+            console.log("Server is ready to take our messages");
+            resolve(success);
+        }
+    });
+});
+
+const mailData = {
+    from: {
+        name: `${firstName} ${lastName}`,
+        address: "myEmail@gmail.com",
+    },
+    replyTo: email,
+    to: "recipient@gmail.com",
+    subject: `form message`,
+    text: message,
+    html: `${message}`,
+};
+
+await new Promise((resolve, reject) => {
+    // send mail
+    transporter.sendMail(mailData, (err, info) => {
+        if (err) {
+            console.error(err);
+            reject(err);
+        } else {
+            console.log(info);
+            resolve(info);
+        }
+    });
+});
+
+res.status(200).json({ status: "OK" });
+};
+ */
 type RequestBody = {
   name: string;
   email: string;
@@ -21,11 +79,24 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   const sanitizedMessage = xss(message);
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    port: 465,
+    host: 'smtp.gmail.com',
     auth: {
       user: process.env.EMAIL_USERNAME,
       pass: process.env.EMAIL_PASSWORD,
     },
+  });
+
+  await new Promise((resolve, reject) => {
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        console.log('Server is ready to take our messages');
+        resolve(success);
+      }
+    });
   });
 
   const mailOptions = {
