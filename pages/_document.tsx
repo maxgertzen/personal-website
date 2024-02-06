@@ -7,7 +7,7 @@ export default function Document() {
       <Head>
         <link rel='icon' href='/favicon.png' />
         <Script
-          src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`}
+          src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
           onLoad={() => {
             console.log('reCAPTCHA script loaded!');
           }}

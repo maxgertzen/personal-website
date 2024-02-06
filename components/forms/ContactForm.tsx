@@ -42,6 +42,7 @@ const ContactForm: React.FC = () => {
         render={({ field }) => (
           <Input
             {...field}
+            id={field.name}
             label='Name'
             variant='bordered'
             isInvalid={!!errors?.name}
@@ -50,6 +51,7 @@ const ContactForm: React.FC = () => {
               'Please use only letters and spaces'
             }
             maxLength={50}
+            autoComplete='name'
           />
         )}
       />
@@ -63,6 +65,7 @@ const ContactForm: React.FC = () => {
         render={({ field }) => (
           <Input
             {...field}
+            id={field.name}
             type='email'
             label='Email'
             variant='bordered'
@@ -74,31 +77,38 @@ const ContactForm: React.FC = () => {
                   'Please enter a valid email'
             }
             isRequired
+            autoComplete='email'
           />
         )}
       />
       <Controller
         name='phoneNumber'
         control={control}
-        rules={{ pattern: /^[0-9]*$/, maxLength: 15 }}
+        rules={{ pattern: /^\+?[0-9]*$/, maxLength: 15 }}
         render={({ field: { onChange, ...field } }) => (
           <Input
             {...field}
+            id={field.name}
             type='tel'
             label='Phone Number'
             variant='bordered'
             isInvalid={!!errors?.phoneNumber}
             errorMessage={
-              errors?.phoneNumber?.type === 'pattern' && 'Invalid phone number'
+              errors?.phoneNumber?.type === 'pattern'
+                ? 'Invalid phone number'
+                : errors?.phoneNumber?.type === 'maxLength'
+                ? 'Phone number too long'
+                : ''
             }
             maxLength={15}
             onChange={(e) => {
               const value = e.target.value;
-              const regex = /^[0-9]*$/;
+              const regex = /^\+?[0-9]*$/;
               if (regex.test(value) || value === '') {
                 onChange(e);
               }
             }}
+            autoComplete='tel'
           />
         )}
       />
@@ -109,6 +119,7 @@ const ContactForm: React.FC = () => {
         render={({ field: { onChange, ...field } }) => (
           <Textarea
             {...field}
+            id={field.name}
             label='Message'
             onValueChange={onChange}
             variant='bordered'
@@ -131,6 +142,7 @@ const ContactForm: React.FC = () => {
         render={({ field: { onChange, value, ...field } }) => (
           <Checkbox
             {...field}
+            id={field.name}
             onValueChange={onChange}
             isSelected={value}
             isInvalid={!!errors?.isAgreeingToTerms}
@@ -143,6 +155,7 @@ const ContactForm: React.FC = () => {
       />
 
       <Button
+        id='contact-form-submit-button'
         color='default'
         type='submit'
         disabled={Object.keys(errors).length > 0}
