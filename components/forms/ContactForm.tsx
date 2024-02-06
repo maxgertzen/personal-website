@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import { Input, Textarea, Button, Checkbox } from '@nextui-org/react';
+import { Input, Textarea, Button, Checkbox, Link } from '@nextui-org/react';
 import submitFormValues from '@/pages/api/submit';
 import Script from 'next/script';
 
@@ -12,6 +12,10 @@ interface FormValues {
   isAgreeingToTerms: boolean;
 }
 const ContactForm: React.FC = () => {
+  const [showAlert, setShowAlert] = React.useState(false);
+  const [alertType, setAlertType] = React.useState<'success' | 'error'>(
+    'success'
+  );
   const {
     control,
     handleSubmit,
@@ -21,16 +25,28 @@ const ContactForm: React.FC = () => {
     delayError: 1000,
   });
 
+  const closeAlert = () => {
+    setShowAlert(false);
+  };
+
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    grecaptcha.ready(function () {
-      grecaptcha
-        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '', {
-          action: 'submit',
-        })
-        .then(function (token) {
-          const formData = { ...data, recaptchaToken: token };
-          submitFormValues(formData);
-        });
+    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '';
+    grecaptcha.ready(async () => {
+      try {
+        const token = await grecaptcha.execute(siteKey, { action: 'submit' });
+        const formData = { ...data, recaptchaToken: token };
+        await submitFormValues(formData);
+        setShowAlert(true);
+        setAlertType('success');
+      } catch (error) {
+        console.error('Error:', error);
+        setShowAlert(true);
+        setAlertType('error');
+      } finally {
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 5000);
+      }
     });
   };
 
@@ -38,13 +54,33 @@ const ContactForm: React.FC = () => {
     <>
       <Script
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
-        onLoad={() => {
-          console.log('reCAPTCHA script loaded!');
-        }}
       />
       <form
-        className='flex flex-col gap-8 border border-gray-800/20 rounded-2xl shadow-lg p-8'
+        className='flex flex-col gap-8 border border-gray-800/20 rounded-2xl shadow-lg p-8 relative'
         onSubmit={handleSubmit(onSubmit)}>
+        {showAlert &&
+          (alertType === 'error' ? (
+            <div
+              className='bg-red-100 border-l-4 border-red-500 rounded-2xl text-red-700 p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40'
+              role='alert'
+              onClick={closeAlert}>
+              <p className='font-bold'>An error occurred!</p>
+              <p>
+                Please try again later, or contact directly at{' '}
+                <Link href='mailto:maxgertzen@gmail.com'>
+                  maxgertzen@gmail.com
+                </Link>
+              </p>
+            </div>
+          ) : (
+            <div
+              className='bg-green-100 border-l-4 border-green-500 rounded-2xl text-green-700 p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40'
+              role='alert'
+              onClick={closeAlert}>
+              <p className='font-bold'>Thank you for your message!</p>
+              <p>We will get back to you as soon as possible.</p>
+            </div>
+          ))}
         <Controller
           name='name'
           control={control}
@@ -83,8 +119,9 @@ const ContactForm: React.FC = () => {
               errorMessage={
                 errors.email?.type === 'required'
                   ? 'Email is required'
-                  : errors.email?.type === 'pattern' &&
-                    'Please enter a valid email'
+                  : errors.email?.type === 'pattern'
+                  ? 'Please enter a valid email'
+                  : ''
               }
               isRequired
               autoComplete='email'
