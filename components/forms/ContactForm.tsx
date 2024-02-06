@@ -24,7 +24,9 @@ const ContactForm: React.FC = () => {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     grecaptcha.ready(function () {
       grecaptcha
-        .execute(process.env.RECAPTCHA_SITE_KEY ?? '', { action: 'submit' })
+        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '', {
+          action: 'submit',
+        })
         .then(function (token) {
           const formData = { ...data, recaptchaToken: token };
           submitFormValues(formData);
