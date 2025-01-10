@@ -1,12 +1,8 @@
-interface FormValues {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  message: string;
-  isAgreeingToTerms: boolean;
-}
+'use client';
 
-const handleSubmit = async (formValues: FormValues) => {
+import { FormSubmission } from '@/types';
+
+const handleSubmit = async (formValues: FormSubmission) => {
   try {
     const response = await fetch('/api/contact', {
       method: 'POST',
