@@ -325,7 +325,7 @@ footer .arrow {
   transform: translateX(0);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 600px) {
   .menu {
     position: fixed; 
     top: 0;
@@ -378,7 +378,7 @@ footer .arrow {
 }
 
 
-@media (max-width: 767px) { 
+@media (max-width: 600px) { 
   .hamburger-container {
     position: absolute;
     background: white;
