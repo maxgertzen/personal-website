@@ -5,23 +5,13 @@ import xss from 'xss';
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
   try {
-    const secret = process.env.RECAPTCHA_SECRET_KEY;
+    const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
-    //TODO: remove
-    console.info(`SECRET verifyRecaptcha ${secret}`);
-    console.info(`TOKEN verifyRecaptcha ${token}`);
-
-    const params = new URLSearchParams({
-      secret: secret || '',
-      response: token,
-    }).toString();
-
-    console.info(`PARAMS: ${params}`);
     const response = await fetch(
       'https://www.google.com/recaptcha/api/siteverify',
       {
         method: 'POST',
-        body: params,
+        body: `secret=${secret}&response=${token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }
     );
