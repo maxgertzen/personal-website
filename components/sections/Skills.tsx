@@ -1,15 +1,16 @@
-import React from 'react';
-import Section from '../common/Section';
-import { Spacer } from '@nextui-org/react';
-import FrontEndSkills from '../skills/FrontEndSkills';
-import CmsSkills from '../skills/CmsSkills';
-import BackEndSkills from '../skills/BackEndSkills';
-import MusicSkills from '../skills/MusicSkills';
+import React from "react";
+import Section from "../common/Section";
+import { Spacer } from "@nextui-org/react";
+import FrontEndSkills from "../skills/FrontEndSkills";
+import CmsSkills from "../skills/CmsSkills";
+import BackEndSkills from "../skills/BackEndSkills";
+import MusicSkills from "../skills/MusicSkills";
 
 const Skills: React.FC = () => {
   return (
-    <Section id='skills' className='text-center px-16'>
-      <h2 className='sm:text-4xl'>Skills</h2>
+    <Section id="skills" className="text-center px-16">
+      <h2 className="sm:text-4xl">Skills</h2>
+      <h6>Some of my tools, frameworks & technologies</h6>
       <Spacer y={8} />
       <CmsSkills />
       <Spacer y={8} />
