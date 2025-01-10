@@ -19,9 +19,14 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `secret=${secret}&response=${token}`,
+        body: new URLSearchParams({
+          secret: secret || '',
+          response: token,
+        }),
       }
     );
+
+    console.info(response);
 
     if (!response.ok)
       throw new Error(
@@ -29,6 +34,7 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
       );
 
     const data = await response.json();
+    console.info(JSON.stringify(data, null, 2));
     return data.success;
   } catch (error) {
     throw error;
@@ -46,6 +52,7 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   }: RequestBody = req.body;
 
   const isCaptchaValid = await verifyRecaptcha(recaptchaToken);
+  console.info(`isCaptchaValid -- ${isCaptchaValid}`);
 
   if (!isCaptchaValid) {
     return res.status(400).json({ error: 'reCAPTCHA verification failed' });
