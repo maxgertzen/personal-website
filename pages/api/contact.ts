@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import nodemailer from "nodemailer";
-import xss from "xss";
+import { NextApiRequest, NextApiResponse } from 'next';
+import nodemailer from 'nodemailer';
+import xss from 'xss';
 
 type RequestBody = {
   name: string;
@@ -12,18 +12,27 @@ type RequestBody = {
 };
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
-  const secret = process.env.RECAPTCHA_SECRET_KEY;
-  const response = await fetch(
-    "https://www.google.com/recaptcha/api/siteverify",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `secret=${secret}&response=${token}`,
-    }
-  );
-  const data = await response.json();
+  try {
+    const secret = process.env.RECAPTCHA_SECRET_KEY;
+    const response = await fetch(
+      'https://www.google.com/recaptcha/api/siteverify',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${secret}&response=${token}`,
+      }
+    );
 
-  return data.success;
+    if (!response.ok)
+      throw new Error(
+        `Something went wrong, received ${response.status} ${response.statusText}`
+      );
+
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    throw error;
+  }
 }
 
 const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -39,18 +48,18 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
   const isCaptchaValid = await verifyRecaptcha(recaptchaToken);
 
   if (!isCaptchaValid) {
-    return res.status(400).json({ error: "reCAPTCHA verification failed" });
+    return res.status(400).json({ error: 'reCAPTCHA verification failed' });
   }
 
   if (!name || !email || !message || !isAgreeingToTerms) {
-    return res.status(400).json({ error: "Missing required fields" });
+    return res.status(400).json({ error: 'Missing required fields' });
   }
 
   const sanitizedMessage = xss(message);
 
   const transporter = nodemailer.createTransport({
     port: 465,
-    host: "smtp.gmail.com",
+    host: 'smtp.gmail.com',
     auth: {
       user: process.env.EMAIL_USERNAME,
       pass: process.env.EMAIL_PASSWORD,
@@ -63,7 +72,7 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
         console.log(error);
         reject(error);
       } else {
-        console.log("Server is ready to take our messages");
+        console.log('Server is ready to take our messages');
         resolve(success);
       }
     });
@@ -79,7 +88,7 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
       <p><strong>Phone Number: </strong> ${phoneNumber}</p>
       <p><strong>Email: </strong> ${email}</p>
       <p><strong>Agreed to receive communications: </strong> ${
-        isAgreeingToTerms ? "Yes" : "No"
+        isAgreeingToTerms ? 'Yes' : 'No'
       }</p>
       <p><strong>Message: </strong> ${sanitizedMessage}</p>
     `,
@@ -87,11 +96,11 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const emailResponse = await transporter.sendMail(mailOptions);
-    console.log("Message Sent", emailResponse.messageId);
-    res.status(200).json({ message: "Email sent" });
+    console.log('Message Sent', emailResponse.messageId);
+    res.status(200).json({ message: 'Email sent' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error sending email" });
+    res.status(500).json({ error: 'Error sending email' });
   }
 };
 
