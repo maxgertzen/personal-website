@@ -1,16 +1,10 @@
 import React from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Input, Textarea, Button, Checkbox, Link } from '@nextui-org/react';
-import submitFormValues from '@/pages/api/submit';
+import submitFormValues from '@/utils/submitForm';
 import Script from 'next/script';
+import { FormValues } from '@/types';
 
-interface FormValues {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  message: string;
-  isAgreeingToTerms: boolean;
-}
 const ContactForm: React.FC = () => {
   const [showAlert, setShowAlert] = React.useState(false);
   const [alertType, setAlertType] = React.useState<'success' | 'error'>(
@@ -56,53 +50,56 @@ const ContactForm: React.FC = () => {
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
       />
       <form
-        className='flex flex-col gap-8 border border-gray-800/20 rounded-2xl shadow-lg p-8 relative'
-        onSubmit={handleSubmit(onSubmit)}>
+        className="flex flex-col gap-8 border border-gray-800/20 rounded-2xl shadow-lg p-8 relative"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         {showAlert &&
           (alertType === 'error' ? (
             <div
-              className='bg-red-100 border-l-4 border-red-500 rounded-2xl text-red-700 p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40'
-              role='alert'
-              onClick={closeAlert}>
-              <p className='font-bold'>An error occurred!</p>
+              className="bg-red-100 border-l-4 border-red-500 rounded-2xl text-red-700 p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40"
+              role="alert"
+              onClick={closeAlert}
+            >
+              <p className="font-bold">An error occurred!</p>
               <p>
                 Please try again later, or contact directly at{' '}
-                <Link href='mailto:maxgertzen@gmail.com'>
+                <Link href="mailto:maxgertzen@gmail.com">
                   maxgertzen@gmail.com
                 </Link>
               </p>
             </div>
           ) : (
             <div
-              className='bg-green-100 border-l-4 border-green-500 rounded-2xl text-green-700 p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40'
-              role='alert'
-              onClick={closeAlert}>
-              <p className='font-bold'>Thank you for your message!</p>
+              className="bg-green-100 border-l-4 border-green-500 rounded-2xl text-green-700 p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40"
+              role="alert"
+              onClick={closeAlert}
+            >
+              <p className="font-bold">Thank you for your message!</p>
               <p>We will get back to you as soon as possible.</p>
             </div>
           ))}
         <Controller
-          name='name'
+          name="name"
           control={control}
           rules={{ pattern: /^[a-zA-Z\s]*$/, maxLength: 50 }}
           render={({ field }) => (
             <Input
               {...field}
               id={field.name}
-              label='Name'
-              variant='bordered'
+              label="Name"
+              variant="bordered"
               isInvalid={!!errors?.name}
               errorMessage={
                 errors?.name?.type === 'pattern' &&
                 'Please use only letters and spaces'
               }
               maxLength={50}
-              autoComplete='name'
+              autoComplete="name"
             />
           )}
         />
         <Controller
-          name='email'
+          name="email"
           control={control}
           rules={{
             required: true,
@@ -112,9 +109,9 @@ const ContactForm: React.FC = () => {
             <Input
               {...field}
               id={field.name}
-              type='email'
-              label='Email'
-              variant='bordered'
+              type="email"
+              label="Email"
+              variant="bordered"
               isInvalid={!!errors.email}
               errorMessage={
                 errors.email?.type === 'required'
@@ -124,21 +121,21 @@ const ContactForm: React.FC = () => {
                   : ''
               }
               isRequired
-              autoComplete='email'
+              autoComplete="email"
             />
           )}
         />
         <Controller
-          name='phoneNumber'
+          name="phoneNumber"
           control={control}
           rules={{ pattern: /^\+?[0-9]*$/, maxLength: 15 }}
           render={({ field: { onChange, ...field } }) => (
             <Input
               {...field}
               id={field.name}
-              type='tel'
-              label='Phone Number'
-              variant='bordered'
+              type="tel"
+              label="Phone Number"
+              variant="bordered"
               isInvalid={!!errors?.phoneNumber}
               errorMessage={
                 errors?.phoneNumber?.type === 'pattern'
@@ -155,21 +152,21 @@ const ContactForm: React.FC = () => {
                   onChange(e);
                 }
               }}
-              autoComplete='tel'
+              autoComplete="tel"
             />
           )}
         />
         <Controller
-          name='message'
+          name="message"
           control={control}
           rules={{ required: true, maxLength: 250 }}
           render={({ field: { onChange, ...field } }) => (
             <Textarea
               {...field}
               id={field.name}
-              label='Message'
+              label="Message"
               onValueChange={onChange}
-              variant='bordered'
+              variant="bordered"
               isInvalid={!!errors?.message}
               errorMessage={
                 errors?.message?.type === 'required'
@@ -183,7 +180,7 @@ const ContactForm: React.FC = () => {
           )}
         />
         <Controller
-          name='isAgreeingToTerms'
+          name="isAgreeingToTerms"
           control={control}
           rules={{ required: true, value: true }}
           render={({ field: { onChange, value, ...field } }) => (
@@ -193,8 +190,9 @@ const ContactForm: React.FC = () => {
               onValueChange={onChange}
               isSelected={value}
               isInvalid={!!errors?.isAgreeingToTerms}
-              isRequired>
-              <p className='text-sm'>
+              isRequired
+            >
+              <p className="text-sm">
                 I agree to receive communication by email or phone
               </p>
             </Checkbox>
@@ -202,13 +200,14 @@ const ContactForm: React.FC = () => {
         />
 
         <Button
-          id='contact-form-submit-button'
-          color='default'
-          type='submit'
+          id="contact-form-submit-button"
+          color="default"
+          type="submit"
           disabled={Object.keys(errors).length > 0}
           isLoading={formState.isLoading || formState.isSubmitting}
-          className='bg-black text-white hover:bg-white hover:text-black hover:border-black hover:border-2 hover:shadow-lg disabled:bg-gray-300 disabled:text-black disabled:border-gray-300 disabled:shadow-none disabled:cursor-not-allowed'
-          fullWidth>
+          className="bg-black text-white hover:bg-white hover:text-black hover:border-black hover:border-2 hover:shadow-lg disabled:bg-gray-300 disabled:text-black disabled:border-gray-300 disabled:shadow-none disabled:cursor-not-allowed"
+          fullWidth
+        >
           SUBMIT
         </Button>
       </form>
