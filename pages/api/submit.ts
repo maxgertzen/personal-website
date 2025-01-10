@@ -7,16 +7,23 @@ interface FormValues {
 }
 
 const handleSubmit = async (formValues: FormValues) => {
-  const response = await fetch('/api/contact', {
-    method: 'POST',
-    body: JSON.stringify(formValues),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      body: JSON.stringify(formValues),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  const data = await response.json();
-  console.log(data);
+    if (!response.ok) throw new Error(`Response status: ${response.status}`);
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default handleSubmit;
