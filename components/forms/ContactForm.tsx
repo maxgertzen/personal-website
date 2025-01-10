@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Input, Textarea, Button, Checkbox, Link } from '@nextui-org/react';
@@ -26,7 +28,7 @@ const ContactForm: React.FC = () => {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '';
     // TODO: REMOVE
-    console.info(siteKey);
+    console.info(`onSubmit: SITE KEY: ${siteKey}`);
     grecaptcha.ready(async () => {
       try {
         const token = await grecaptcha.execute(siteKey, { action: 'submit' });
