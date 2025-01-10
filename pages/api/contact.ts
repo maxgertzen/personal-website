@@ -7,16 +7,11 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
   try {
     const secret = process.env.RECAPTCHA_SITE_SECRET;
 
-    //TODO: remove
-    console.info(`SECRET verifyRecaptcha ${secret}`);
-    console.info(`TOKEN verifyRecaptcha ${token}`);
-
     const params = new URLSearchParams({
       secret: secret || '',
       response: token,
     }).toString();
 
-    console.info(`PARAMS: ${params}`);
     const response = await fetch(
       'https://www.google.com/recaptcha/api/siteverify',
       {
@@ -49,10 +44,6 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
     isAgreeingToTerms,
     recaptchaToken,
   }: FormSubmission = req.body;
-
-  const someVariableEnv = process.env.TESTING;
-
-  console.info(`SOME VARIABLE TEST: ${someVariableEnv}`);
 
   const isCaptchaValid = await verifyRecaptcha(recaptchaToken);
 
