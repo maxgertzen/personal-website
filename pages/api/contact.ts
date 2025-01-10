@@ -17,13 +17,8 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
     "https://www.google.com/recaptcha/api/siteverify",
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        secret,
-        response: token,
-      }),
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `secret=${secret}&response=${token}`,
     }
   );
   const data = await response.json();
