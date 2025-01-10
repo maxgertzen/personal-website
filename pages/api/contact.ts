@@ -6,6 +6,10 @@ import xss from 'xss';
 async function verifyRecaptcha(token: string): Promise<boolean> {
   try {
     const secret = process.env.RECAPTCHA_SECRET_KEY;
+
+    //TODO: remove
+    console.info(secret);
+    console.info(token);
     const response = await fetch(
       'https://www.google.com/recaptcha/api/siteverify',
       {
@@ -13,7 +17,7 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
         body: new URLSearchParams({
           secret: secret || '',
           response: token,
-        }),
+        }).toString(),
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }
     );
