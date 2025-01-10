@@ -25,6 +25,8 @@ const ContactForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '';
+    // TODO: REMOVE
+    console.info(siteKey);
     grecaptcha.ready(async () => {
       try {
         const token = await grecaptcha.execute(siteKey, { action: 'submit' });
