@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface SectionProps {
   id: string;
@@ -15,8 +15,9 @@ const Section: React.FC<React.PropsWithChildren<SectionProps>> = ({
   return (
     <section
       id={id}
-      style={{ minHeight: fullHeight ? '100vh' : 'auto' }}
-      className={`flex flex-col gap-2 items-center ${className}`}>
+      style={{ minHeight: fullHeight ? "100vh" : "auto" }}
+      className={`flex flex-col gap-2 items-center ${className} scroll-mt-20`}
+    >
       {children}
     </section>
   );
