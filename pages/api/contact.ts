@@ -1,15 +1,7 @@
+import { FormSubmission } from '@/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 import xss from 'xss';
-
-type RequestBody = {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  isAgreeingToTerms: boolean;
-  message: string;
-  recaptchaToken: string;
-};
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
   try {
@@ -18,15 +10,13 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
       'https://www.google.com/recaptcha/api/siteverify',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
           secret: secret || '',
           response: token,
         }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }
     );
-
-    console.info(response);
 
     if (!response.ok)
       throw new Error(
@@ -35,6 +25,7 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
 
     const data = await response.json();
     console.info(JSON.stringify(data, null, 2));
+
     return data.success;
   } catch (error) {
     throw error;
@@ -49,10 +40,9 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
     phoneNumber,
     isAgreeingToTerms,
     recaptchaToken,
-  }: RequestBody = req.body;
+  }: FormSubmission = req.body;
 
   const isCaptchaValid = await verifyRecaptcha(recaptchaToken);
-  console.info(`isCaptchaValid -- ${isCaptchaValid}`);
 
   if (!isCaptchaValid) {
     return res.status(400).json({ error: 'reCAPTCHA verification failed' });
