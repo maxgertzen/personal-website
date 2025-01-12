@@ -340,6 +340,7 @@ footer .arrow {
 }
 
 .menu ul {
+  position: relative;
   list-style: none;
   display: flex;
   padding: 0;
@@ -393,7 +394,7 @@ footer .arrow {
     display: flex;
     align-items: center;
     justify-content: center;
-    right: -2.5rem;
+    right: -2.7rem;
     top: 25rem;
     box-shadow: 4px 10px 15px -3px rgb(0 0 0 / 0.1), 4px 4px 6px -4px rgb(0 0 0 / 0.1);
   }
