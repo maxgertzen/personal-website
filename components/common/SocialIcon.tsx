@@ -8,13 +8,6 @@ interface SocialIconProps {
   className?: string;
 }
 
-const animations: Record<number, string> = {
-  0: 'bounce',
-  1: 'shakeX',
-  2: 'pulse',
-  3: 'wobble',
-};
-
 function SocialIcon({
   icon,
   title,
@@ -25,15 +18,17 @@ function SocialIcon({
   const handleClick = () => {
     window.open(link, '_blank', 'noopener noreferrer');
   };
+
   return (
     <li
-      className={`flex flex-col items-center hover:cursor-pointer animate__animated animate__${animations[animationIndex]}-hover`}
-      onClick={handleClick}>
+      className={`flex flex-col items-center hover:cursor-pointer social-icon-item`}
+      onClick={handleClick}
+    >
       {React.cloneElement(icon as JSX.Element, {
         title,
         className,
       })}
-      <span className='sr-only'>{title}</span>
+      <span className="sr-only">{title}</span>
     </li>
   );
 }
