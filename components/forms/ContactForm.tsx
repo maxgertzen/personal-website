@@ -16,9 +16,13 @@ const ContactForm: React.FC = () => {
     control,
     handleSubmit,
     formState: { errors, ...formState },
+    reset,
   } = useForm<FormValues>({
     mode: 'all',
     delayError: 1000,
+    resetOptions: {
+      keepDefaultValues: false,
+    },
   });
 
   const closeAlert = () => {
@@ -35,11 +39,26 @@ const ContactForm: React.FC = () => {
         await submitFormValues(formData);
         setShowAlert(true);
         setAlertType('success');
+        reset(
+          {
+            email: '',
+            isAgreeingToTerms: false,
+            message: '',
+            name: '',
+            phoneNumber: '',
+          },
+          {
+            keepIsSubmitted: false,
+            keepDirtyValues: false,
+            keepTouched: false,
+          }
+        );
       } catch (error) {
         console.error('Error:', error);
         setShowAlert(true);
         setAlertType('error');
       } finally {
+        reset({});
         setTimeout(() => {
           setShowAlert(false);
         }, 5000);
@@ -201,7 +220,6 @@ const ContactForm: React.FC = () => {
             </Checkbox>
           )}
         />
-
         <Button
           id="contact-form-submit-button"
           color="default"
