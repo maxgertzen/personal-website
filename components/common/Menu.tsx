@@ -40,6 +40,11 @@ export const Menu: FC<MenuProps> = ({ items }) => {
       threshold: 0.2,
     });
 
+    const heroSection = document.getElementById('hero');
+    if (heroSection) {
+      observer.current?.observe(heroSection);
+    }
+
     items.forEach(({ id }) => {
       const section = document.getElementById(id);
       if (section) {
@@ -59,12 +64,16 @@ export const Menu: FC<MenuProps> = ({ items }) => {
   }, []);
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} className="backdrop-opacity-75">
+    <Navbar
+      maxWidth="full"
+      onMenuOpenChange={setIsMenuOpen}
+      className="backdrop-opacity-75"
+    >
       <NavbarMenuToggle
         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         className="sm:hidden"
       />
-      <NavbarContent className="hidden sm:flex items-center" justify="center">
+      <NavbarContent className="hidden sm:flex" justify="end">
         {items.map(({ id, label }, index) => (
           <NavbarItem key={index} isActive={activeSection === id}>
             <Link
