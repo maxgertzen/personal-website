@@ -1,5 +1,13 @@
-import React from 'react';
-import NavigationMenu from './NavigationMenu';
+import { FC, useEffect, useRef, useState } from 'react';
+import {
+  Link,
+  Navbar,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
+} from '@nextui-org/react';
 
 interface MenuItem {
   id: string;
@@ -10,71 +18,77 @@ interface MenuProps {
   items: MenuItem[];
 }
 
-const Menu: React.FC<MenuProps> = ({ items }) => {
-  const [activeSection, setActiveSection] = React.useState<string>('hero');
-  const [isUserScroll, setIsUserScroll] = React.useState(true);
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+export const Menu: FC<MenuProps> = ({ items }) => {
+  const [activeSection, setActiveSection] = useState<string>(
+    items[0]?.id || ''
+  );
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const observer = useRef<IntersectionObserver | null>(null);
 
-  let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-
-  const handleScroll = () => {
-    if (!isUserScroll) {
-      setIsUserScroll(true);
-      return;
-    }
-
-    const currentScrollY = window.scrollY;
-
-    lastScrollY = currentScrollY;
-
-    items.forEach((item) => {
-      const section = document.getElementById(item.id);
-      if (section) {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= 3 && rect.bottom >= 0) {
-          setActiveSection(item.id);
+  useEffect(() => {
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
         }
+      });
+    };
+
+    observer.current = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: '-50px 0px -50% 0px',
+      threshold: 0.2,
+    });
+
+    items.forEach(({ id }) => {
+      const section = document.getElementById(id);
+      if (section) {
+        observer.current?.observe(section);
       }
     });
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  React.useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      items.forEach(({ id }) => {
+        const section = document.getElementById(id);
+        if (section) {
+          observer.current?.unobserve(section);
+        }
+      });
+      observer.current?.disconnect();
     };
-  }, [items]);
-
-  const scrollToSection = (id: string) => {
-    setIsUserScroll(false);
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  }, []);
 
   return (
-    <>
-      {isMenuOpen && (
-        <div
-          className='fixed inset-0 bg-black bg-opacity-50 z-40'
-          onClick={() => setIsMenuOpen(false)}></div>
-      )}
-      <NavigationMenu
-        items={items}
-        onMenuItemClick={(id) => {
-          scrollToSection(id);
-        }}
-        activeSection={activeSection}
-        isMenuOpen={isMenuOpen}
-        toggleMenuOpen={toggleMenu}
+    <Navbar onMenuOpenChange={setIsMenuOpen} className="backdrop-opacity-75">
+      <NavbarMenuToggle
+        aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+        className="sm:hidden"
       />
-    </>
+      <NavbarContent className="hidden sm:flex items-center" justify="center">
+        {items.map(({ id, label }, index) => (
+          <NavbarItem key={index} isActive={activeSection === id}>
+            <Link
+              color={activeSection === id ? 'warning' : 'foreground'}
+              href={`#${id}`}
+            >
+              {label}
+            </Link>
+          </NavbarItem>
+        ))}
+      </NavbarContent>
+      <NavbarMenu className="backdrop-opacity-50">
+        {items.map(({ id, label }, index) => (
+          <NavbarMenuItem key={index} isActive={activeSection === id}>
+            <Link
+              color={activeSection === id ? 'warning' : 'foreground'}
+              href={`#${id}`}
+            >
+              {label}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
+    </Navbar>
   );
 };
 
