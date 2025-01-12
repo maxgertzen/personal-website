@@ -1,5 +1,4 @@
 import type { AppProps } from 'next/app';
-import 'animate.css';
 import '../styles/globals.css';
 import { Providers } from '../providers';
 

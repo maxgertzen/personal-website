@@ -332,3 +332,8 @@ footer .arrow {
   }
 }
 
+.social-icon-item:hover {
+  path {
+    fill: hsl(var(--nextui-warning));
+  }
+}
