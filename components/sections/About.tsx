@@ -20,7 +20,7 @@ const About: React.FC = () => {
         impactful and creative experiences that have the user at their heart. My
         approach is based on collaboration, transparency and clear
         communication. I speak three languages fluently English, Russian and
-        Hebrew. Let's connect and transform your vision into a vibrant web
+        Hebrew. Let&apos;s connect and transform your vision into a vibrant web
         presence.
       </p>
       <div className='mt-section-gap-lg' />

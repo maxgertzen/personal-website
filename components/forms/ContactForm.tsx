@@ -115,7 +115,7 @@ const ContactForm: React.FC = () => {
           control={control}
           rules={{
             required: true,
-            pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/gi,
+            pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
           }}
           render={({ field }) => (
             <TextInput
@@ -139,7 +139,7 @@ const ContactForm: React.FC = () => {
         <Controller
           name="phoneNumber"
           control={control}
-          rules={{ pattern: /^\+?[0-9]*$/, maxLength: 15 }}
+          rules={{ pattern: /^\+?[0-9]*$/, minLength: 7, maxLength: 15 }}
           render={({ field: { onChange, ...field } }) => (
             <TextInput
               {...field}
@@ -150,6 +150,8 @@ const ContactForm: React.FC = () => {
               errorMessage={
                 errors?.phoneNumber?.type === 'pattern'
                   ? 'Invalid phone number'
+                  : errors?.phoneNumber?.type === 'minLength'
+                  ? 'Phone number too short'
                   : errors?.phoneNumber?.type === 'maxLength'
                   ? 'Phone number too long'
                   : ''
