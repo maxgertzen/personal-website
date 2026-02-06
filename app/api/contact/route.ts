@@ -27,7 +27,7 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
 
   const data = await response.json();
 
-  return data.success;
+  return data.success && data.score >= 0.5;
 }
 
 const startGoogleApp = async (formValues: FormValues) => {
@@ -75,14 +75,17 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const sanitizedName = xss(name);
+  const sanitizedEmail = xss(email);
+  const sanitizedPhone = xss(phoneNumber);
   const sanitizedMessage = xss(message);
 
   try {
     const response = await startGoogleApp({
-      name,
-      email,
+      name: sanitizedName,
+      email: sanitizedEmail,
       message: sanitizedMessage,
-      phoneNumber,
+      phoneNumber: sanitizedPhone,
       isAgreeingToTerms,
     });
 
