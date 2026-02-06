@@ -1,16 +1,17 @@
-import type { FC, SVGProps } from 'react';
+import type { CSSProperties, FC, SVGProps } from 'react';
 
 interface SkillItemProps {
   Icon: FC<SVGProps<SVGSVGElement>>;
   title: string;
+  style?: CSSProperties;
 }
 
-function SkillItem({ Icon, title }: SkillItemProps) {
+function SkillItem({ Icon, title, style }: SkillItemProps) {
   return (
-    <li className='flex flex-col items-center'>
+    <div className='flex flex-col items-center' style={style}>
       <Icon aria-hidden='true' />
       <span className='sr-only'>{title}</span>
-    </li>
+    </div>
   );
 }
 
