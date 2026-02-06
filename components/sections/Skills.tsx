@@ -38,6 +38,7 @@ const Skills: React.FC = () => {
                 key={skill.title}
                 Icon={skill.Icon}
                 title={skill.title}
+                darkClass={skill.darkClass}
                 style={getItemPlacement(skillIndex, category.skills.length)}
               />
             ))}

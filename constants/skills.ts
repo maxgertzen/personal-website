@@ -24,6 +24,7 @@ import MixerLogo from '@/public/assets/music/music-player-mixer.svg';
 export type SkillDefinition = {
   title: string;
   Icon: FC<SVGProps<SVGSVGElement>>;
+  darkClass?: string;
 };
 
 export type SkillCategory = {
@@ -45,7 +46,7 @@ export const skillCategories: SkillCategory[] = [
     skills: [
       { title: 'React', Icon: ReactLogo },
       { title: 'Next.js', Icon: NextLogo },
-      { title: 'JavaScript', Icon: JavascriptLogo },
+      { title: 'JavaScript', Icon: JavascriptLogo, darkClass: '' },
     ],
   },
   {
@@ -59,7 +60,7 @@ export const skillCategories: SkillCategory[] = [
   {
     title: 'Music Production & Performance',
     skills: [
-      { title: 'Logic Pro', Icon: LogicLogo },
+      { title: 'Logic Pro', Icon: LogicLogo, darkClass: '' },
       { title: 'Ableton Live', Icon: AbletonLogo },
       { title: 'Piano', Icon: PianoLogo },
       { title: 'Mixer', Icon: MixerLogo },
