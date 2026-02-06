@@ -1,19 +1,14 @@
-import React from 'react';
+import type { FC, SVGProps } from 'react';
 
 interface SkillItemProps {
-  icon: React.ReactNode;
+  Icon: FC<SVGProps<SVGSVGElement>>;
   title: string;
 }
 
-function SkillItem({ icon, title }: SkillItemProps) {
+function SkillItem({ Icon, title }: SkillItemProps) {
   return (
-    <li
-      className={`flex flex-col items-center ${
-        title === 'Php' ? 'self-center' : ''
-      }`}>
-      {React.cloneElement(icon as JSX.Element, {
-        title,
-      })}
+    <li className='flex flex-col items-center'>
+      <Icon aria-hidden='true' />
       <span className='sr-only'>{title}</span>
     </li>
   );
