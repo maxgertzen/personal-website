@@ -1,5 +1,3 @@
-'use client';
-
 import { FormSubmission } from '@/types';
 
 const handleSubmit = async (formValues: FormSubmission) => {
