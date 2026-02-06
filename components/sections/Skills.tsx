@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import Section from "../common/Section";
 import { Spacer } from "@nextui-org/react";
@@ -9,7 +11,7 @@ import MusicSkills from "../skills/MusicSkills";
 const Skills: React.FC = () => {
   return (
     <Section id="skills" className="text-center px-16">
-      <h2 className="sm:text-4xl">Skills</h2>
+      <h2>Skills</h2>
       <h6>Some of my tools, frameworks & technologies</h6>
       <Spacer y={8} />
       <CmsSkills />

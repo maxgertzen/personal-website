@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import Section from "../common/Section";
 import { CV_PATH } from "@/constants/documents";
@@ -21,7 +23,7 @@ const CV: React.FC = () => {
 
   return (
     <Section id="cv" className="w-[80%] m-auto">
-      <h2 className="sm:text-4xl">CV</h2>
+      <h2>CV</h2>
       <Spacer y={4} />
       <div className="flex gap-4 items-stretch">
         <PdfIcon className="w-24 h-24" />

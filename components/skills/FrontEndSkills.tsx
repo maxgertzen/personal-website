@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import SkillItem from '../common/SkillItem';
 import SkillRow from '../common/SkillRow';

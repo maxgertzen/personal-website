@@ -1,3 +1,5 @@
+'use client';
+
 import { Divider, Spacer } from '@nextui-org/react';
 import React from 'react';
 
@@ -13,7 +15,7 @@ const SkillRow: React.FC<React.PropsWithChildren<SkillRowProps>> = ({
 }) => {
   return (
     <div className='w-[100%]'>
-      <h3 className='sm:text-2xl'>{title}</h3>
+      <h3>{title}</h3>
       <Spacer y={4} />
       <ul
         className={`flex justify-between ${

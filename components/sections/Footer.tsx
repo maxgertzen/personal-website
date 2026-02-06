@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import ScrollArrow from '../common/ScrollArrow';
 import { Spacer } from '@nextui-org/react';
