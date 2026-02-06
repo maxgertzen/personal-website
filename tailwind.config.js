@@ -8,8 +8,31 @@ const config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {},
-  }, 
+    extend: {
+      fontFamily: {
+        display: ['Major Mono Display', 'monospace'],
+        body: ['Josefin Sans', 'sans-serif'],
+      },
+      fontSize: {
+        'hero': ['3.125rem', { lineHeight: '1' }],
+        'hero-lg': ['8rem', { lineHeight: '1' }],
+        'section-title': ['1.75rem', { lineHeight: '1.2' }],
+        'section-title-lg': ['2.25rem', { lineHeight: '1.2' }],
+        'subtitle': ['1.125rem', { lineHeight: '1.4' }],
+        'subtitle-lg': ['2.25rem', { lineHeight: '1.3' }],
+        'body-lg': ['1.5rem', { lineHeight: '2.5rem' }],
+        'skill-heading': ['1.5rem', { lineHeight: '1.3' }],
+      },
+      spacing: {
+        'section-gap': '2rem',
+        'section-gap-lg': '4rem',
+        'section-gap-xl': '8rem',
+      },
+      colors: {
+        brand: 'hsl(var(--color-brand) / <alpha-value>)',
+      },
+    },
+  },
   darkMode: "class",
   plugins: [nextui()]
 }
