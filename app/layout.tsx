@@ -23,8 +23,49 @@ const majorMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Max Gertzen',
-  icons: { icon: '/favicon.png' },
+  metadataBase: new URL('https://maxgertzen.com'),
+  title: {
+    default: 'Max Gertzen | Full-Stack Developer',
+    template: '%s | Max Gertzen',
+  },
+  description:
+    'Max Gertzen — Full-Stack Developer specializing in React, Next.js, Node.js and .NET. Bridging the gap between ideas and digital reality.',
+  keywords: [
+    'Full-Stack Developer',
+    'React',
+    'Next.js',
+    'Node.js',
+    '.NET',
+    'TypeScript',
+    'JavaScript',
+    'Web Developer',
+    'Software Engineer',
+    'Max Gertzen',
+  ],
+  authors: [{ name: 'Max Gertzen', url: 'https://maxgertzen.com' }],
+  creator: 'Max Gertzen',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://maxgertzen.com',
+    siteName: 'Max Gertzen',
+    title: 'Max Gertzen | Full-Stack Developer',
+    description:
+      'Full-Stack Developer specializing in React, Next.js, Node.js and .NET. Bridging the gap between ideas and digital reality.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Max Gertzen | Full-Stack Developer',
+    description:
+      'Full-Stack Developer specializing in React, Next.js, Node.js and .NET. Bridging the gap between ideas and digital reality.',
+  },
+  alternates: {
+    canonical: 'https://maxgertzen.com',
+  },
+  icons: {
+    icon: '/favicon.png',
+    apple: '/favicon.png',
+  },
 };
 
 export default function RootLayout({

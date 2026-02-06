@@ -21,9 +21,9 @@ const Hero: React.FC = () => {
           <br />
           Gertzen
         </h1>
-        <h5 className='self-start tracking-[.02rem] ml-2 sm:mt-2 sm:font-light'>
+        <p className='self-start text-subtitle font-bold tracking-[.02rem] ml-2 sm:mt-2 sm:font-light'>
           Full-Stack Developer. Creator. Musician. Human.
-        </h5>
+        </p>
         <div className='absolute bottom-80 sm:bottom-60 self-center'>
           <div className='block sm:hidden'>
             <ScrollArrow
