@@ -1,31 +1,26 @@
-'use client';
-
-import { Divider, Spacer } from '@nextui-org/react';
 import React from 'react';
 
 interface SkillRowProps {
   title: string;
-  isMusic?: boolean;
+  columns: number;
 }
 
 const SkillRow: React.FC<React.PropsWithChildren<SkillRowProps>> = ({
   title,
-  isMusic = false,
+  columns,
   children,
 }) => {
   return (
-    <div className='w-[100%]'>
+    <div className='w-full'>
       <h3>{title}</h3>
-      <Spacer y={4} />
-      <ul
-        className={`flex justify-between ${
-          isMusic
-            ? 'items-center w-[80%] flex-wrap content-center gap-4'
-            : 'items-baseline w-[100%]'
-        } list-none m-auto sm:w-6/12 sm:mt-8`}>
-        {children}
-      </ul>
-      <Divider className='hidden mt-12 sm:block' />
+      <div className='mt-4'>
+        <ul
+          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+          className='grid place-items-center list-none m-auto sm:w-6/12 sm:mt-8'>
+          {children}
+        </ul>
+      </div>
+      <hr className='hidden mt-12 sm:block border-divider' />
     </div>
   );
 };

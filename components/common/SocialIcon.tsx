@@ -1,36 +1,24 @@
 'use client';
 
-import React from 'react';
+import type { FC, SVGProps } from 'react';
 
 interface SocialIconProps {
-  icon: React.ReactNode;
+  Icon: FC<SVGProps<SVGSVGElement>>;
   title: string;
-  link: string;
-  animationIndex: number;
-  className?: string;
+  href: string;
 }
 
-function SocialIcon({
-  icon,
-  title,
-  className,
-  link,
-  animationIndex,
-}: SocialIconProps) {
-  const handleClick = () => {
-    window.open(link, '_blank', 'noopener noreferrer');
-  };
-
+function SocialIcon({ Icon, title, href }: SocialIconProps) {
   return (
-    <li
-      className={`flex flex-col items-center hover:cursor-pointer social-icon-item`}
-      onClick={handleClick}
-    >
-      {React.cloneElement(icon as JSX.Element, {
-        title,
-        className,
-      })}
-      <span className="sr-only">{title}</span>
+    <li className='flex flex-col items-center social-icon-item'>
+      <a
+        href={href}
+        target='_blank'
+        rel='noopener noreferrer'
+        aria-label={title}
+      >
+        <Icon aria-hidden='true' />
+      </a>
     </li>
   );
 }
