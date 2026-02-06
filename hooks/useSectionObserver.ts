@@ -10,7 +10,10 @@ export function useSectionObserver(
   const extraKey = extraIds.join(',');
 
   useEffect(() => {
-    const allIds = [...extraIds, ...sectionIds];
+    const allIds = [
+      ...extraKey.split(',').filter(Boolean),
+      ...sectionKey.split(','),
+    ];
 
     const observer = new IntersectionObserver(
       (entries) => {
