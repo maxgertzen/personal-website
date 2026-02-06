@@ -24,9 +24,9 @@ const config = {
         'skill-heading': ['1.5rem', { lineHeight: '1.3' }],
       },
       spacing: {
-        'section-gap': '2rem',
-        'section-gap-lg': '4rem',
-        'section-gap-xl': '8rem',
+        'section-gap': '3rem',
+        'section-gap-lg': '6rem',
+        'section-gap-xl': '10rem',
       },
       colors: {
         brand: 'hsl(var(--color-brand) / <alpha-value>)',

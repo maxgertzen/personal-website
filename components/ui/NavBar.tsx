@@ -10,6 +10,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from '@nextui-org/react';
+import ThemeToggle from './ThemeToggle';
 
 interface NavBarItem {
   id: string;
@@ -45,6 +46,12 @@ const NavBar: React.FC<NavBarProps> = ({ items, activeSection }) => {
             </Link>
           </NavbarItem>
         ))}
+        <NavbarItem>
+          <ThemeToggle />
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end" className="sm:hidden">
+        <ThemeToggle />
       </NavbarContent>
       <NavbarMenu className="backdrop-opacity-50">
         {items.map(({ id, label }, index) => (

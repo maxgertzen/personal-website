@@ -17,7 +17,7 @@ function SocialIcon({ Icon, title, href }: SocialIconProps) {
         rel='noopener noreferrer'
         aria-label={title}
       >
-        <Icon aria-hidden='true' />
+        <Icon className='svg-icon' aria-hidden='true' />
       </a>
     </li>
   );

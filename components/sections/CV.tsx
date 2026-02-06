@@ -13,7 +13,7 @@ const CV: React.FC = () => {
       <h2>CV</h2>
       <div className='mt-4'>
         <div className='flex gap-4 items-stretch'>
-          <PdfIcon className='w-24 h-24' />
+          <PdfIcon className='w-24 h-24 svg-icon' />
           <div className='flex flex-col gap-4 justify-evenly'>
             <a
               href={CV_PATH}
@@ -21,7 +21,7 @@ const CV: React.FC = () => {
               className='flex items-center gap-2 h-6'
               aria-label='Download CV as PDF'
             >
-              <DownloadIcon className='w-6 h-6' />
+              <DownloadIcon className='w-6 h-6 svg-icon' />
               <span className='mt-2 link-animate'>Download</span>
             </a>
             <a
@@ -31,7 +31,7 @@ const CV: React.FC = () => {
               className='flex items-center gap-2 h-6'
               aria-label='Open CV in new tab'
             >
-              <OpenIcon className='w-6 h-6' />
+              <OpenIcon className='w-6 h-6 svg-icon' />
               <span className='mt-2 link-animate'>Open</span>
             </a>
           </div>

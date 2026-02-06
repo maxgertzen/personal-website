@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${josefinSans.variable} ${majorMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${josefinSans.variable} ${majorMono.variable}`}>
       <body>
         <Providers>{children}</Providers>
       </body>

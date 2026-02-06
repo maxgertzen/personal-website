@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
   const { scrollToTop } = useScrollTo();
 
   return (
-    <footer className='bg-black text-white p-30 flex flex-col items-center gap-8'>
+    <footer className='p-30 flex flex-col items-center gap-8'>
       <div className='mt-section-gap' />
       <ScrollArrow
         direction='up'
