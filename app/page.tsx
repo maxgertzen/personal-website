@@ -1,3 +1,4 @@
+import JsonLd from '@/components/common/JsonLd';
 import Menu from '@/components/common/Menu';
 import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
@@ -20,6 +21,7 @@ const MenuItems: { id: string; label: string }[] = [
 export default function HomePage() {
   return (
     <main>
+      <JsonLd />
       <Menu items={MenuItems} />
       <Hero />
       <About />
