@@ -69,6 +69,10 @@
   position: relative;
 }
 
+.dark .scroller {
+  border-color: #fff;
+}
+
 .scroll-up {
   &::before {
     content: '';
@@ -84,6 +88,11 @@
     animation: wheel-down 2s infinite;
     -webkit-animation: wheel-down 2s infinite;
   }
+}
+
+.dark .scroll-up::before,
+.dark .scroll-down::before {
+  background-color: #fff;
 }
 
 .scroll-down {
@@ -132,8 +141,7 @@
 }
 
 .dark .arrow-down,
-.dark .arrow-up,
-footer .arrow {
+.dark .arrow-up {
   border-right: 2px solid #fff;
   border-bottom: 2px solid #fff;
 }
@@ -143,6 +151,7 @@ footer .arrow {
   border-right: 2px solid #000;
   border-bottom: 2px solid #000;
 }
+
 
 .arrow {
 	display: block;
@@ -215,7 +224,12 @@ footer .arrow {
 }
 
 .dark .svg-icon {
-  fill: #fff;
+  filter: brightness(0) invert(1);
+}
+
+
+.dark .hero-bg {
+  filter: invert(1);
 }
 
 .animate__wobble-hover:hover {

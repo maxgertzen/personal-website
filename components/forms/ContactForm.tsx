@@ -74,7 +74,7 @@ const ContactForm: React.FC = () => {
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
       />
       <form
-        className="flex flex-col gap-8 border border-gray-800/20 rounded-2xl shadow-lg p-8 relative"
+        className="flex flex-col gap-8 border border-gray-800/20 dark:border-white/20 rounded-2xl shadow-lg p-8 relative"
         onSubmit={handleSubmit(onSubmit)}
       >
         {showAlert && (
