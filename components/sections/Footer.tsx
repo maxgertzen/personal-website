@@ -2,19 +2,18 @@
 
 import React from 'react';
 import ScrollArrow from '../common/ScrollArrow';
+import { useScrollTo } from '@/hooks/useScrollTo';
 
 const Footer: React.FC = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const { scrollToTop } = useScrollTo();
 
   return (
     <footer className='bg-black text-white p-30 flex flex-col items-center gap-8'>
       <div className='mt-section-gap' />
       <ScrollArrow
         direction='up'
-        className='hover:cursor-pointer border-white'
         type='arrows'
+        aria-label='Scroll to top'
         onClick={scrollToTop}
       />
       <p>&copy; Built by Max Gertzen</p>

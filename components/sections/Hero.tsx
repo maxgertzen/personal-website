@@ -4,12 +4,10 @@ import React from 'react';
 import Section from '../common/Section';
 import ScrollArrow from '../common/ScrollArrow';
 import HeroBackground from '../common/HeroBackground';
+import { useScrollTo } from '@/hooks/useScrollTo';
 
 const Hero: React.FC = () => {
-  const scrollToAbout = () => {
-    const about = document.getElementById('about');
-    about?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const { scrollToElement } = useScrollTo();
 
   return (
     <>
@@ -30,17 +28,17 @@ const Hero: React.FC = () => {
           <div className='block sm:hidden'>
             <ScrollArrow
               direction='down'
-              className='hover:cursor-pointer'
               type='arrows'
-              onClick={scrollToAbout}
+              aria-label='Scroll to about section'
+              onClick={() => scrollToElement('about')}
             />
           </div>
           <div className='hidden sm:block'>
             <ScrollArrow
               direction='down'
-              className='hover:cursor-pointer'
               type='mouse'
-              onClick={scrollToAbout}
+              aria-label='Scroll to about section'
+              onClick={() => scrollToElement('about')}
             />
           </div>
         </div>
