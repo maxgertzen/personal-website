@@ -2,16 +2,15 @@
 
 import React from 'react';
 import Section from '../common/Section';
-import { Spacer } from '@nextui-org/react';
 
 const About: React.FC = () => {
   return (
     <Section
       id='about'
       className='m-auto text-center max-w-[80%] sm:max-w-prose'>
-      <Spacer y={8} />
+      <div className='mt-section-gap' />
       <h2>About</h2>
-      <Spacer y={8} />
+      <div className='mt-section-gap' />
       <p className='leading-8 sm:text-2xl sm:leading-10 sm:font-extralight'>
         I&apos;m Max, a Full-Stack Developer bridging the gap between ideas and
         digital reality. My journey in tech is driven by curiosity, a passion
@@ -21,10 +20,10 @@ const About: React.FC = () => {
         impactful and creative experiences that have the user at their heart. My
         approach is based on collaboration, transparency and clear
         communication. I speak three languages fluently English, Russian and
-        Hebrew. Let’s connect and transform your vision into a vibrant web
+        Hebrew. Let's connect and transform your vision into a vibrant web
         presence.
       </p>
-      <Spacer y={16} />
+      <div className='mt-section-gap-lg' />
     </Section>
   );
 };

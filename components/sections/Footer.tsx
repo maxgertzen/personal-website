@@ -2,7 +2,6 @@
 
 import React from 'react';
 import ScrollArrow from '../common/ScrollArrow';
-import { Spacer } from '@nextui-org/react';
 
 const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -11,7 +10,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className='bg-black text-white p-30 flex flex-col items-center gap-8'>
-      <Spacer y={8} />
+      <div className='mt-section-gap' />
       <ScrollArrow
         direction='up'
         className='hover:cursor-pointer border-white'
