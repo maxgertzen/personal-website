@@ -48,10 +48,6 @@
     @apply font-light sm:text-skill-heading;
   }
 
-  h5 {
-    @apply text-subtitle font-bold;
-  }
-
   p {
     @apply font-light;
   }

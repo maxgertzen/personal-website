@@ -23,7 +23,7 @@ const Skills: React.FC = () => {
   return (
     <Section id='skills' className='text-center px-16'>
       <h2>Skills</h2>
-      <h6>Some of my tools, frameworks & technologies</h6>
+      <p className='text-base'>Some of my tools, frameworks & technologies</p>
       <div
         className='mt-section-gap w-full grid place-items-center gap-y-4 m-auto px-4 sm:w-6/12 sm:px-0'
         style={{
