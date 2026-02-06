@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Section from '../common/Section';
 import { Spacer } from '@nextui-org/react';
@@ -8,7 +10,7 @@ const About: React.FC = () => {
       id='about'
       className='m-auto text-center max-w-[80%] sm:max-w-prose'>
       <Spacer y={8} />
-      <h2 className='sm:text-4xl'>About</h2>
+      <h2>About</h2>
       <Spacer y={8} />
       <p className='leading-8 sm:text-2xl sm:leading-10 sm:font-extralight'>
         I&apos;m Max, a Full-Stack Developer bridging the gap between ideas and

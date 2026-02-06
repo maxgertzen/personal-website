@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Section from '../common/Section';
 import SocialRow from '../common/SocialRow';
@@ -43,7 +45,7 @@ const socialLinks = [
 const SocialLinks: React.FC = () => {
   return (
     <Section id='social-links'>
-      <h2 className='sm:text-4xl'>Social Links</h2>
+      <h2>Social Links</h2>
       <Spacer y={8} />
       <SocialRow>
         {socialLinks.map((link, index) => (
