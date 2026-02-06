@@ -1,21 +1,17 @@
-import React from 'react';
+import type { CSSProperties, FC, SVGProps } from 'react';
 
 interface SkillItemProps {
-  icon: React.ReactNode;
+  Icon: FC<SVGProps<SVGSVGElement>>;
   title: string;
+  style?: CSSProperties;
 }
 
-function SkillItem({ icon, title }: SkillItemProps) {
+function SkillItem({ Icon, title, style }: SkillItemProps) {
   return (
-    <li
-      className={`flex flex-col items-center ${
-        title === 'Php' ? 'self-center' : ''
-      }`}>
-      {React.cloneElement(icon as JSX.Element, {
-        title,
-      })}
+    <div className='flex flex-col items-center' style={style}>
+      <Icon aria-hidden='true' />
       <span className='sr-only'>{title}</span>
-    </li>
+    </div>
   );
 }
 

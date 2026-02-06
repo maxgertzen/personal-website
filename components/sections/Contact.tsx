@@ -1,15 +1,16 @@
+'use client';
+
 import React from 'react';
 import Section from '../common/Section';
 import ContactForm from '../forms/ContactForm';
-import { Spacer } from '@nextui-org/react';
 
 const Contact: React.FC = () => {
   return (
     <Section id='contact' className='w-[80%] m-auto'>
-      <h2 className='sm:text-4xl'>Contact</h2>
-      <Spacer y={4} />
+      <h2>Contact</h2>
+      <div className='mt-4' />
       <ContactForm />
-      <Spacer y={8} />
+      <div className='mt-section-gap' />
     </Section>
   );
 };

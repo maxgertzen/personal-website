@@ -2,57 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Josefin Sans Fonts */
-@font-face {
-  font-family: 'Josefin Sans';
-  src: url('/fonts/JosefinSans-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Josefin Sans';
-  src: url('/fonts/JosefinSans-ExtraLight.ttf') format('truetype');
-  font-weight: 200;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Josefin Sans';
-  src: url('/fonts/JosefinSans-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Josefin Sans';
-  src: url('/fonts/JosefinSans-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Josefin Sans';
-  src: url('/fonts/JosefinSans-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Josefin Sans';
-  src: url('/fonts/JosefinSans-Thin.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-}
-
-/* Major Mono Display Font */
-@font-face {
-  font-family: 'Major Mono Display';
-  src: url('/fonts/MajorMonoDisplay-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 /* Brand color token (decoupled from NextUI) */
 :root {
   --color-brand: 37 91% 55%;

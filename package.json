@@ -6,14 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
     "autoprefixer": "^10.4.17",
     "framer-motion": "^11.0.3",
     "next": "14.2.31",
-    "nodemailer": "^6.9.9",
     "postcss": "^8.4.33",
     "react": "^18",
     "react-dom": "^18",
@@ -22,15 +21,14 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^22",
-    "@types/nodemailer": "^6.4.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^9",
-    "eslint-config-next": "^14.2.0",
+    "eslint-config-next": "15.5.12",
     "postcss-nesting": "^12.0.2",
-    "typescript": "^5",
-    "url-loader": "^4.1.1"
+    "typescript": "^5"
   }
 }
