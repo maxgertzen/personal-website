@@ -5,6 +5,7 @@ type ScrollArrowProps = {
   type?: 'mouse' | 'arrows';
   className?: string;
   onClick?: () => void;
+  'aria-label': string;
 };
 
 const ScrollArrow: React.FC<ScrollArrowProps> = ({
@@ -12,10 +13,15 @@ const ScrollArrow: React.FC<ScrollArrowProps> = ({
   type = 'mouse',
   onClick,
   className = '',
+  'aria-label': ariaLabel,
 }) => {
   if (type === 'arrows') {
     return (
-      <div className={className} onClick={onClick}>
+      <button
+        className={`bg-transparent border-none p-0 cursor-pointer ${className}`}
+        onClick={onClick}
+        aria-label={ariaLabel}
+      >
         <div
           className={`arrow ${
             direction === 'down' ? 'arrow-down down' : 'arrow-up up'
@@ -28,16 +34,17 @@ const ScrollArrow: React.FC<ScrollArrowProps> = ({
           className={`arrow ${
             direction === 'down' ? 'arrow-down down' : 'arrow-up up'
           }-arrow-3`}></div>
-      </div>
+      </button>
     );
   }
 
   return (
-    <div
+    <button
       className={`scroller ${
         direction === 'down' ? 'scroll-down' : 'scroll-up'
-      } ${className}`}
-      onClick={onClick}></div>
+      } ${className} bg-transparent p-0 cursor-pointer`}
+      onClick={onClick}
+      aria-label={ariaLabel}></button>
   );
 };
 
