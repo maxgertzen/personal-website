@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import { Input, Textarea, Button, Checkbox, Link } from '@nextui-org/react';
+import { TextInput, TextArea, FormButton, FormCheckbox, Alert } from '@/components/ui';
 import submitFormValues from '@/utils/submitForm';
 import Script from 'next/script';
 import { FormValues } from '@/types';
@@ -15,13 +15,16 @@ const ContactForm: React.FC = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, ...formState },
+    formState: { errors, isValid, isLoading, isSubmitting },
     reset,
   } = useForm<FormValues>({
-    mode: 'all',
-    delayError: 1000,
-    resetOptions: {
-      keepDefaultValues: false,
+    mode: 'onTouched',
+    defaultValues: {
+      name: '',
+      email: '',
+      phoneNumber: '',
+      message: '',
+      isAgreeingToTerms: false,
     },
   });
 
@@ -58,7 +61,6 @@ const ContactForm: React.FC = () => {
         setShowAlert(true);
         setAlertType('error');
       } finally {
-        reset({});
         setTimeout(() => {
           setShowAlert(false);
         }, 5000);
@@ -75,41 +77,29 @@ const ContactForm: React.FC = () => {
         className="flex flex-col gap-8 border border-gray-800/20 rounded-2xl shadow-lg p-8 relative"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {showAlert &&
-          (alertType === 'error' ? (
-            <div
-              className="bg-red-100 border-l-4 border-red-500 rounded-2xl text-red-700 p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40"
-              role="alert"
-              onClick={closeAlert}
-            >
-              <p className="font-bold">An error occurred!</p>
+        {showAlert && (
+          alertType === 'error' ? (
+            <Alert variant="error" title="An error occurred!" onClose={closeAlert}>
               <p>
                 Please try again later, or contact directly at{' '}
-                <Link href="mailto:maxgertzen@gmail.com">
-                  maxgertzen@gmail.com
-                </Link>
+                <a href="mailto:maxgertzen@gmail.com">maxgertzen@gmail.com</a>
               </p>
-            </div>
+            </Alert>
           ) : (
-            <div
-              className="bg-green-100 border-l-4 border-green-500 rounded-2xl text-green-700 p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40"
-              role="alert"
-              onClick={closeAlert}
-            >
-              <p className="font-bold">Thank you for your message!</p>
+            <Alert variant="success" title="Thank you for your message!" onClose={closeAlert}>
               <p>We will get back to you as soon as possible.</p>
-            </div>
-          ))}
+            </Alert>
+          )
+        )}
         <Controller
           name="name"
           control={control}
           rules={{ pattern: /^[a-zA-Z\s]*$/, maxLength: 50 }}
           render={({ field }) => (
-            <Input
+            <TextInput
               {...field}
               id={field.name}
               label="Name"
-              variant="bordered"
               isInvalid={!!errors?.name}
               errorMessage={
                 errors?.name?.type === 'pattern' &&
@@ -128,12 +118,11 @@ const ContactForm: React.FC = () => {
             pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/gi,
           }}
           render={({ field }) => (
-            <Input
+            <TextInput
               {...field}
               id={field.name}
               type="email"
               label="Email"
-              variant="bordered"
               isInvalid={!!errors.email}
               errorMessage={
                 errors.email?.type === 'required'
@@ -152,12 +141,11 @@ const ContactForm: React.FC = () => {
           control={control}
           rules={{ pattern: /^\+?[0-9]*$/, maxLength: 15 }}
           render={({ field: { onChange, ...field } }) => (
-            <Input
+            <TextInput
               {...field}
               id={field.name}
               type="tel"
               label="Phone Number"
-              variant="bordered"
               isInvalid={!!errors?.phoneNumber}
               errorMessage={
                 errors?.phoneNumber?.type === 'pattern'
@@ -183,12 +171,11 @@ const ContactForm: React.FC = () => {
           control={control}
           rules={{ required: true, maxLength: 250 }}
           render={({ field: { onChange, ...field } }) => (
-            <Textarea
+            <TextArea
               {...field}
               id={field.name}
               label="Message"
-              onValueChange={onChange}
-              variant="bordered"
+              onChange={onChange}
               isInvalid={!!errors?.message}
               errorMessage={
                 errors?.message?.type === 'required'
@@ -206,10 +193,10 @@ const ContactForm: React.FC = () => {
           control={control}
           rules={{ required: true, value: true }}
           render={({ field: { onChange, value, ...field } }) => (
-            <Checkbox
+            <FormCheckbox
               {...field}
               id={field.name}
-              onValueChange={onChange}
+              onChange={onChange}
               isSelected={value}
               isInvalid={!!errors?.isAgreeingToTerms}
               isRequired
@@ -217,20 +204,19 @@ const ContactForm: React.FC = () => {
               <p className="text-sm">
                 I agree to receive communication by email or phone
               </p>
-            </Checkbox>
+            </FormCheckbox>
           )}
         />
-        <Button
+        <FormButton
           id="contact-form-submit-button"
-          color="default"
           type="submit"
-          disabled={Object.keys(errors).length > 0}
-          isLoading={formState.isLoading || formState.isSubmitting}
+          isDisabled={!isValid}
+          isLoading={isLoading || isSubmitting}
           className="bg-black text-white hover:bg-white hover:text-black hover:border-black hover:border-2 hover:shadow-lg disabled:bg-gray-300 disabled:text-black disabled:border-gray-300 disabled:shadow-none disabled:cursor-not-allowed"
           fullWidth
         >
           SUBMIT
-        </Button>
+        </FormButton>
       </form>
     </>
   );
