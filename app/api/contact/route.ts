@@ -2,6 +2,34 @@ import { NextRequest, NextResponse } from 'next/server';
 import { FormSubmission, FormValues } from '@/types';
 import xss from 'xss';
 
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(ip: string): { allowed: boolean; retryAfterSec: number } {
+  const now = Date.now();
+
+  for (const [key, entry] of rateLimitMap) {
+    if (now > entry.resetTime) rateLimitMap.delete(key);
+  }
+
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, retryAfterSec: 0 };
+  }
+
+  if (entry.count >= RATE_LIMIT_MAX) {
+    const retryAfterSec = Math.ceil((entry.resetTime - now) / 1000);
+    return { allowed: false, retryAfterSec };
+  }
+
+  entry.count++;
+  return { allowed: true, retryAfterSec: 0 };
+}
+
 async function verifyRecaptcha(token: string): Promise<boolean> {
   const secret = process.env.RECAPTCHA_SITE_SECRET;
 
@@ -50,6 +78,20 @@ const startGoogleApp = async (formValues: FormValues) => {
 };
 
 export async function POST(request: NextRequest) {
+  const ip =
+    request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+    request.ip ||
+    'unknown';
+
+  const { allowed, retryAfterSec } = checkRateLimit(ip);
+
+  if (!allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(retryAfterSec) } }
+    );
+  }
+
   const {
     name,
     email,
