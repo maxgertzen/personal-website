@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Section from '../common/Section';
 
@@ -12,16 +10,17 @@ const About: React.FC = () => {
       <h2>About</h2>
       <div className='mt-section-gap' />
       <p className='leading-8 sm:text-2xl sm:leading-10 sm:font-extralight'>
-        I&apos;m Max, a Full-Stack Developer bridging the gap between ideas and
-        digital reality. My journey in tech is driven by curiosity, a passion
-        for problem solving and commitment to excellence. My experience spans
-        various aspects of web development and with a background in music
-        including production and performance; I thrive on producing intuitive,
-        impactful and creative experiences that have the user at their heart. My
-        approach is based on collaboration, transparency and clear
-        communication. I speak three languages fluently English, Russian and
-        Hebrew. Let&apos;s connect and transform your vision into a vibrant web
-        presence.
+        Hi, I&apos;m Max. I build things - software mostly, but also music,
+        sculpture, and the occasional performance that probably shouldn&apos;t
+        exist. My day work is engineering: I design the foundations teams build
+        on, and lately I&apos;ve been deep in AI, making apps with LLMs, vision,
+        and agents that actually do something useful. I work in React,
+        TypeScript, and Node, run my own contracting company (Greatwhale), and
+        move between codebases, clients, and countries without needing anyone to
+        hand me a map. I&apos;m curious by default, trilingual by a good accident
+        of life (English, Russian, and Hebrew), and I care as much about how a
+        thing feels to use as whether it runs. If you&apos;re making something
+        ambitious, I&apos;d love to hear about it.
       </p>
       <div className='mt-section-gap-lg' />
     </Section>

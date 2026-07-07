@@ -1,5 +1,10 @@
 import type { FC, SVGProps } from 'react';
 
+// AI & LLM
+import OpenaiLogo from '@/public/assets/ai/openai.svg';
+import AnthropicLogo from '@/public/assets/ai/anthropic.svg';
+import SparklesLogo from '@/public/assets/ai/sparkles.svg';
+
 // CMS
 import WordpressLogo from '@/public/assets/cms/wordpress.svg';
 import WixLogo from '@/public/assets/cms/wix.svg';
@@ -34,11 +39,11 @@ export type SkillCategory = {
 
 export const skillCategories: SkillCategory[] = [
   {
-    title: 'Content Management & E-Commerce',
+    title: 'AI & LLM',
     skills: [
-      { title: 'WordPress', Icon: WordpressLogo },
-      { title: 'Wix', Icon: WixLogo },
-      { title: 'Shopify', Icon: ShopifyLogo },
+      { title: 'Anthropic', Icon: AnthropicLogo },
+      { title: 'OpenAI', Icon: OpenaiLogo },
+      { title: 'AI Agents', Icon: SparklesLogo },
     ],
   },
   {
@@ -55,6 +60,14 @@ export const skillCategories: SkillCategory[] = [
       { title: 'Dotnet', Icon: DotnetLogo },
       { title: 'Node', Icon: NodeLogo },
       { title: 'Php', Icon: PhpLogo },
+    ],
+  },
+  {
+    title: 'Content Management & E-Commerce',
+    skills: [
+      { title: 'WordPress', Icon: WordpressLogo },
+      { title: 'Wix', Icon: WixLogo },
+      { title: 'Shopify', Icon: ShopifyLogo },
     ],
   },
   {
