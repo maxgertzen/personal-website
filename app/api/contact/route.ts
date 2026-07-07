@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { FormSubmission, FormValues } from '@/types';
 import xss from 'xss';
+import nodemailer from 'nodemailer';
+
+// nodemailer needs the Node.js runtime; it cannot run on the edge.
+export const runtime = 'nodejs';
 
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
@@ -58,30 +62,37 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
   return data.success && data.score >= 0.5;
 }
 
-const startGoogleApp = async (formValues: FormValues) => {
-  const appUrl = process.env.G_APP_URL;
+const sendContactEmail = async (formValues: FormValues) => {
+  const user = process.env.FASTMAIL_SMTP_USER;
+  const pass = process.env.FASTMAIL_SMTP_PASSWORD;
 
-  if (!appUrl) throw new Error('No URL is set');
+  if (!user || !pass) throw new Error('SMTP credentials are not set');
 
-  const response = await fetch(appUrl, {
-    method: 'POST',
-    body: JSON.stringify(formValues),
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.fastmail.com',
+    port: 465,
+    secure: true,
+    auth: { user, pass },
   });
 
-  const data = await response.json();
-
-  if (!response.ok || data.status !== 'success') {
-    throw data || response.status;
-  }
-
-  return data;
+  await transporter.sendMail({
+    from: `"Portfolio Contact" <${user}>`,
+    to: process.env.CONTACT_TO_EMAIL || user,
+    replyTo: formValues.email,
+    subject: `New contact form message from ${formValues.name}`,
+    text: [
+      `Name: ${formValues.name}`,
+      `Email: ${formValues.email}`,
+      `Phone: ${formValues.phoneNumber || '—'}`,
+      '',
+      formValues.message,
+    ].join('\n'),
+  });
 };
 
 export async function POST(request: NextRequest) {
   const ip =
-    request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
-    request.ip ||
-    'unknown';
+    request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
 
   const { allowed, retryAfterSec } = checkRateLimit(ip);
 
@@ -92,16 +103,35 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const {
-    name,
-    email,
-    message,
-    phoneNumber,
-    isAgreeingToTerms,
-    recaptchaToken,
-  }: FormSubmission = await request.json();
+  let body: FormSubmission;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: 'Invalid request body' },
+      { status: 400 }
+    );
+  }
 
-  const isCaptchaValid = await verifyRecaptcha(recaptchaToken);
+  if (!body || typeof body !== 'object') {
+    return NextResponse.json(
+      { error: 'Invalid request body' },
+      { status: 400 }
+    );
+  }
+
+  const { name, email, message, phoneNumber, isAgreeingToTerms, recaptchaToken } =
+    body;
+
+  let isCaptchaValid: boolean;
+  try {
+    isCaptchaValid = await verifyRecaptcha(recaptchaToken);
+  } catch {
+    return NextResponse.json(
+      { error: 'reCAPTCHA verification unavailable' },
+      { status: 502 }
+    );
+  }
 
   if (!isCaptchaValid) {
     return NextResponse.json(
@@ -123,7 +153,7 @@ export async function POST(request: NextRequest) {
   const sanitizedMessage = xss(message);
 
   try {
-    const response = await startGoogleApp({
+    await sendContactEmail({
       name: sanitizedName,
       email: sanitizedEmail,
       message: sanitizedMessage,
@@ -131,8 +161,12 @@ export async function POST(request: NextRequest) {
       isAgreeingToTerms,
     });
 
-    return NextResponse.json(response);
-  } catch {
-    return new NextResponse(null, { status: 500 });
+    return NextResponse.json({ status: 'success' });
+  } catch (error) {
+    console.error('Failed to send contact email:', error);
+    return NextResponse.json(
+      { error: 'Failed to send message' },
+      { status: 500 }
+    );
   }
 }
