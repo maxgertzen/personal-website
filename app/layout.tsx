@@ -25,21 +25,25 @@ const majorMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL('https://maxgertzen.com'),
   title: {
-    default: 'Max Gertzen | Full-Stack Developer',
+    default: 'Max Gertzen | Senior Full-Stack Engineer - AI Integration',
     template: '%s | Max Gertzen',
   },
   description:
-    'Max Gertzen — Full-Stack Developer specializing in React, Next.js, Node.js and .NET. Bridging the gap between ideas and digital reality.',
+    'Max Gertzen - senior full-stack engineer building AI-integrated products: LLM apps, agent systems, and edge infrastructure in TypeScript, Node, and .NET. Senior and contract work via Greatwhale Solutions.',
   keywords: [
-    'Full-Stack Developer',
+    'Senior Full-Stack Engineer',
+    'AI Integration Engineer',
+    'LLM Integration',
+    'OpenAI API',
+    'Anthropic',
+    'AI Agents',
     'React',
     'Next.js',
     'Node.js',
-    '.NET',
     'TypeScript',
-    'JavaScript',
-    'Web Developer',
+    '.NET',
     'Software Engineer',
+    'Software Contractor',
     'Max Gertzen',
   ],
   authors: [{ name: 'Max Gertzen', url: 'https://maxgertzen.com' }],
@@ -49,15 +53,15 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://maxgertzen.com',
     siteName: 'Max Gertzen',
-    title: 'Max Gertzen | Full-Stack Developer',
+    title: 'Max Gertzen | Senior Full-Stack Engineer - AI Integration',
     description:
-      'Full-Stack Developer specializing in React, Next.js, Node.js and .NET. Bridging the gap between ideas and digital reality.',
+      'Senior full-stack engineer building AI-integrated products: LLM apps, agent systems, and edge infrastructure in TypeScript, Node, and .NET. Senior and contract work via Greatwhale Solutions.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Max Gertzen | Full-Stack Developer',
+    title: 'Max Gertzen | Senior Full-Stack Engineer - AI Integration',
     description:
-      'Full-Stack Developer specializing in React, Next.js, Node.js and .NET. Bridging the gap between ideas and digital reality.',
+      'Senior full-stack engineer building AI-integrated products: LLM apps, agent systems, and edge infrastructure in TypeScript, Node, and .NET. Senior and contract work via Greatwhale Solutions.',
   },
   alternates: {
     canonical: 'https://maxgertzen.com',

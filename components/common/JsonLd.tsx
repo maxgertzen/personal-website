@@ -2,7 +2,7 @@ export default function JsonLd() {
   const person = {
     '@type': 'Person',
     name: 'Max Gertzen',
-    jobTitle: 'Full-Stack Developer',
+    jobTitle: 'Senior Full-Stack Engineer',
     url: 'https://maxgertzen.com',
     sameAs: [
       'https://github.com/maxgertzen',
@@ -11,27 +11,30 @@ export default function JsonLd() {
       'https://soundcloud.com/maxgertzen',
     ],
     knowsAbout: [
+      'AI Integration',
+      'LLM Integration',
+      'OpenAI API',
+      'Anthropic API',
+      'AI Agents',
+      'Prompt Engineering',
       'React',
       'Next.js',
-      'JavaScript',
       'TypeScript',
+      'JavaScript',
       'Node.js',
       'C#',
       '.NET',
-      'PHP',
       'MongoDB',
-      'Angular',
       'NX Monorepo',
+      'Module Federation',
+      'Cloudflare Workers',
       'Docker',
-      'WordPress',
-      'Shopify',
-      'Wix',
     ],
     worksFor: [
       {
         '@type': 'Organization',
         name: 'ChargeAfter',
-        description: 'Consumer financing platform',
+        description: 'Multi-lender embedded/POS consumer financing platform',
       },
       {
         '@type': 'Organization',
@@ -42,12 +45,12 @@ export default function JsonLd() {
     hasOccupation: [
       {
         '@type': 'Occupation',
-        name: 'Full Stack Developer',
+        name: 'Senior Full-Stack Engineer',
         description:
-          'Front-end and back-end development for lender integrations in a consumer financing platform. Led Angular to React migration, introduced NX monorepo and module federation.',
+          'Front-end and back-end development for lender integrations on a multi-lender embedded/POS consumer financing platform. Played a key engineering role in an Angular to React migration; set up the NX monorepo and module-federation micro-frontend architecture now used across 30+ lender integrations. Builds LLM and agent systems on the OpenAI and Anthropic APIs.',
         occupationLocation: { '@type': 'Country', name: 'Thailand' },
         skills:
-          'React, NX, Storybook, Material UI, .NET, C#, MongoDB, Azure, GCP, Docker',
+          'React, NX, Module Federation, TypeScript, OpenAI API, Anthropic API, LLM Integration, .NET, C#, MongoDB, Azure, GCP, Docker',
       },
       {
         '@type': 'Occupation',
@@ -61,7 +64,7 @@ export default function JsonLd() {
         '@type': 'Occupation',
         name: 'Integration Project Manager',
         description:
-          'Led implementation of an inventory management system for Israel\'s largest furniture company, translating manual workflows into automated programs.',
+          'Led a warehouse/inventory management system rollout for a leading commercial-furniture supplier (hospitality, office, and institutional sectors), translating manual workflows into automated programs.',
         skills: 'Project Management, Automation, Stakeholder Management',
       },
     ],
@@ -101,7 +104,7 @@ export default function JsonLd() {
     name: 'Max Gertzen',
     url: 'https://maxgertzen.com',
     description:
-      'Max Gertzen — Full-Stack Developer specializing in React, Next.js, Node.js and .NET. Bridging the gap between ideas and digital reality.',
+      'Max Gertzen - senior full-stack engineer building AI-integrated products: LLM apps, agent systems, and edge infrastructure in TypeScript, Node, and .NET.',
   };
 
   const jsonLd = {
