@@ -1,5 +1,3 @@
-'use client';
-
 import React, { CSSProperties } from 'react';
 import Section from '../common/Section';
 import SkillItem from '../common/SkillItem';
