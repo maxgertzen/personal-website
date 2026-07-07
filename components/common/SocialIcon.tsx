@@ -1,5 +1,3 @@
-'use client';
-
 import type { FC, SVGProps } from 'react';
 
 interface SocialIconProps {
