@@ -35,36 +35,47 @@ const ContactForm: React.FC = () => {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '';
 
-    grecaptcha.ready(async () => {
-      try {
-        const token = await grecaptcha.execute(siteKey, { action: 'submit' });
-        const formData = { ...data, recaptchaToken: token };
-        await submitFormValues(formData);
-        setShowAlert(true);
-        setAlertType('success');
-        reset(
-          {
-            email: '',
-            isAgreeingToTerms: false,
-            message: '',
-            name: '',
-            phoneNumber: '',
-          },
-          {
-            keepIsSubmitted: false,
-            keepDirtyValues: false,
-            keepTouched: false,
-          }
-        );
-      } catch (error) {
-        console.error('Error:', error);
-        setShowAlert(true);
-        setAlertType('error');
-      } finally {
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 5000);
-      }
+    if (typeof grecaptcha === 'undefined') {
+      setAlertType('error');
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 5000);
+      return;
+    }
+
+    // Promise keeps RHF's isSubmitting true across the detached grecaptcha.ready callback.
+    return new Promise<void>((resolve) => {
+      grecaptcha.ready(async () => {
+        try {
+          const token = await grecaptcha.execute(siteKey, { action: 'submit' });
+          const formData = { ...data, recaptchaToken: token };
+          await submitFormValues(formData);
+          setShowAlert(true);
+          setAlertType('success');
+          reset(
+            {
+              email: '',
+              isAgreeingToTerms: false,
+              message: '',
+              name: '',
+              phoneNumber: '',
+            },
+            {
+              keepIsSubmitted: false,
+              keepDirtyValues: false,
+              keepTouched: false,
+            }
+          );
+        } catch (error) {
+          console.error('Error:', error);
+          setShowAlert(true);
+          setAlertType('error');
+        } finally {
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 5000);
+          resolve();
+        }
+      });
     });
   };
 
@@ -82,7 +93,7 @@ const ContactForm: React.FC = () => {
             <Alert variant="error" title="An error occurred!" onClose={closeAlert}>
               <p>
                 Please try again later, or contact directly at{' '}
-                <a href="mailto:maxgertzen@gmail.com">maxgertzen@gmail.com</a>
+                <a href="mailto:max@maxgertzen.com">max@maxgertzen.com</a>
               </p>
             </Alert>
           ) : (
@@ -94,7 +105,7 @@ const ContactForm: React.FC = () => {
         <Controller
           name="name"
           control={control}
-          rules={{ pattern: /^[a-zA-Z\s]*$/, maxLength: 50 }}
+          rules={{ required: true, pattern: /^[a-zA-Z\s]+$/, maxLength: 50 }}
           render={({ field }) => (
             <TextInput
               {...field}
@@ -102,10 +113,14 @@ const ContactForm: React.FC = () => {
               label="Name"
               isInvalid={!!errors?.name}
               errorMessage={
-                errors?.name?.type === 'pattern' &&
-                'Please use only letters and spaces'
+                errors?.name?.type === 'required'
+                  ? 'Name is required'
+                  : errors?.name?.type === 'pattern'
+                  ? 'Please use only letters and spaces'
+                  : ''
               }
               maxLength={50}
+              isRequired
               autoComplete="name"
             />
           )}
@@ -212,7 +227,7 @@ const ContactForm: React.FC = () => {
         <FormButton
           id="contact-form-submit-button"
           type="submit"
-          isDisabled={!isValid}
+          isDisabled={!isValid || isSubmitting}
           isLoading={isLoading || isSubmitting}
           className="bg-black text-white hover:bg-white hover:text-black hover:border-black hover:border-2 hover:shadow-lg disabled:bg-gray-300 disabled:text-black disabled:border-gray-300 disabled:shadow-none disabled:cursor-not-allowed"
           fullWidth

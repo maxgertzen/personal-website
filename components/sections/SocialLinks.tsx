@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Section from '../common/Section';
 import SocialRow from '../common/SocialRow';
