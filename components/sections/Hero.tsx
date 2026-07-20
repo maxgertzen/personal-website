@@ -3,7 +3,7 @@
 import React from 'react';
 import Section from '../common/Section';
 import ScrollArrow from '../common/ScrollArrow';
-import HeroBackground from '../common/HeroBackground';
+import Emphasis from '@/components/ui/Emphasis';
 import { useScrollTo } from '@/hooks/useScrollTo';
 
 const Hero: React.FC = () => {
@@ -11,7 +11,6 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      <HeroBackground />
       <Section
         id='hero'
         className='mt-36 px-[3rem] sm:items-start sm:px-20 sm:w-[100%]'
@@ -22,9 +21,10 @@ const Hero: React.FC = () => {
           Gertzen
         </h1>
         <p className='self-start text-subtitle font-bold tracking-[.02rem] ml-2 sm:mt-2 sm:font-light'>
-          Senior Engineer. AI Builder. Artist. Human.
+          Senior Engineer. AI Builder. Artist.{' '}
+          <Emphasis variant='underline'>Human.</Emphasis>
         </p>
-        <div className='absolute bottom-80 sm:bottom-60 self-center'>
+        <div className='absolute bottom-80 sm:bottom-60 self-center stage-scroller-fade'>
           <div className='block sm:hidden'>
             <ScrollArrow
               direction='down'
