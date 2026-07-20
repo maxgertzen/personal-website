@@ -9,19 +9,23 @@ interface ClientItemProps {
 function ClientItem({ Icon, title, href }: ClientItemProps) {
   const icon = (
     <div className="w-32 h-10 sm:w-44 sm:h-14 flex items-center justify-center">
-      <Icon className="max-h-full max-w-full svg-icon" aria-label={title} />
+      <Icon className="max-h-full max-w-full svg-icon" aria-hidden="true" />
     </div>
   );
 
   if (href) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer">
+      <a href={href} target="_blank" rel="noopener noreferrer" aria-label={title}>
         {icon}
       </a>
     );
   }
 
-  return icon;
+  return (
+    <div role="img" aria-label={title}>
+      {icon}
+    </div>
+  );
 }
 
 export default ClientItem;

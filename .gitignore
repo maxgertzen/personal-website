@@ -42,3 +42,9 @@ next-env.d.ts
 # Claude Code
 CLAUDE.md
 .claude/
+# local design sketchbook (not deployed)
+prototypes/
+
+# agent skill tooling (installed locally, not part of the site)
+.agents/
+skills-lock.json

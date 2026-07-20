@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { Analytics } from '@vercel/analytics/next';
 import { Providers } from '../providers';
+import ScrollStage from '@/components/common/ScrollStage';
 import '../styles/globals.css';
 
 const josefinSans = localFont({
@@ -80,7 +82,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${josefinSans.variable} ${majorMono.variable}`}>
       <body>
+        <ScrollStage />
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );

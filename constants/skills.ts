@@ -1,35 +1,28 @@
 import type { FC, SVGProps } from 'react';
 
-// AI & LLM
-import OpenaiLogo from '@/public/assets/ai/openai.svg';
-import AnthropicLogo from '@/public/assets/ai/anthropic.svg';
-import SparklesLogo from '@/public/assets/ai/sparkles.svg';
-
-// CMS
-import WordpressLogo from '@/public/assets/cms/wordpress.svg';
-import WixLogo from '@/public/assets/cms/wix.svg';
-import ShopifyLogo from '@/public/assets/cms/shopify.svg';
-
-// Front End
-import ReactLogo from '@/public/assets/front-end/react.svg';
-import NextLogo from '@/public/assets/front-end/next.svg';
-import JavascriptLogo from '@/public/assets/front-end/javascript.svg';
-
-// Back End
-import DotnetLogo from '@/public/assets/back-end/dotnet.svg';
-import NodeLogo from '@/public/assets/back-end/node.svg';
-import PhpLogo from '@/public/assets/back-end/php.svg';
-
-// Music
-import LogicLogo from '@/public/assets/music/logic.svg';
-import AbletonLogo from '@/public/assets/music/ableton.svg';
-import PianoLogo from '@/public/assets/music/libre-music-piano.svg';
-import MixerLogo from '@/public/assets/music/music-player-mixer.svg';
+import AnthropicLogo from '@/public/assets/skills/anthropic.svg';
+import OpenaiLogo from '@/public/assets/skills/openai.svg';
+import AiAgentsLogo from '@/public/assets/skills/ai-agents.svg';
+import ReactLogo from '@/public/assets/skills/react.svg';
+import NextLogo from '@/public/assets/skills/next.svg';
+import TypescriptLogo from '@/public/assets/skills/typescript.svg';
+import JavascriptLogo from '@/public/assets/skills/javascript.svg';
+import DotnetLogo from '@/public/assets/skills/dotnet.svg';
+import NodeLogo from '@/public/assets/skills/node.svg';
+import PhpLogo from '@/public/assets/skills/php.svg';
+import MakeLogo from '@/public/assets/skills/make.svg';
+import N8nLogo from '@/public/assets/skills/n8n.svg';
+import GithubActionsLogo from '@/public/assets/skills/githubactions.svg';
+import WordpressLogo from '@/public/assets/skills/wordpress.svg';
+import WixLogo from '@/public/assets/skills/wix.svg';
+import ShopifyLogo from '@/public/assets/skills/shopify.svg';
+import LogicLogo from '@/public/assets/skills/logic.svg';
+import AbletonLogo from '@/public/assets/skills/ableton.svg';
+import PianoLogo from '@/public/assets/skills/piano.svg';
 
 export type SkillDefinition = {
   title: string;
   Icon: FC<SVGProps<SVGSVGElement>>;
-  darkClass?: string;
 };
 
 export type SkillCategory = {
@@ -43,7 +36,7 @@ export const skillCategories: SkillCategory[] = [
     skills: [
       { title: 'Anthropic', Icon: AnthropicLogo },
       { title: 'OpenAI', Icon: OpenaiLogo },
-      { title: 'AI Agents', Icon: SparklesLogo },
+      { title: 'AI Agents', Icon: AiAgentsLogo },
     ],
   },
   {
@@ -51,7 +44,8 @@ export const skillCategories: SkillCategory[] = [
     skills: [
       { title: 'React', Icon: ReactLogo },
       { title: 'Next.js', Icon: NextLogo },
-      { title: 'JavaScript', Icon: JavascriptLogo, darkClass: '' },
+      { title: 'TypeScript', Icon: TypescriptLogo },
+      { title: 'JavaScript', Icon: JavascriptLogo },
     ],
   },
   {
@@ -61,6 +55,18 @@ export const skillCategories: SkillCategory[] = [
       { title: 'Node', Icon: NodeLogo },
       { title: 'Php', Icon: PhpLogo },
     ],
+  },
+  {
+    title: 'Automation',
+    skills: [
+      { title: 'Make', Icon: MakeLogo },
+      { title: 'n8n', Icon: N8nLogo },
+      { title: 'Claude', Icon: AnthropicLogo },
+    ],
+  },
+  {
+    title: 'CI/CD',
+    skills: [{ title: 'GitHub Actions', Icon: GithubActionsLogo }],
   },
   {
     title: 'Content Management & E-Commerce',
@@ -73,10 +79,9 @@ export const skillCategories: SkillCategory[] = [
   {
     title: 'Music Production & Performance',
     skills: [
-      { title: 'Logic Pro', Icon: LogicLogo, darkClass: '' },
+      { title: 'Logic Pro', Icon: LogicLogo },
       { title: 'Ableton Live', Icon: AbletonLogo },
       { title: 'Piano', Icon: PianoLogo },
-      { title: 'Mixer', Icon: MixerLogo },
     ],
   },
 ];

@@ -1,0 +1,24 @@
+# Max Gertzen
+
+> Senior full-stack engineer specializing in AI integration — LLM apps, agent systems, and edge infrastructure. Builds in TypeScript, React, Node, and .NET. Available for senior and contract work through Greatwhale Solutions.
+
+Max Gertzen is a senior software engineer focused on AI-integrated product development: LLM applications, vision, and autonomous agents built on the OpenAI and Anthropic APIs. He designs the foundations teams build on and moves easily between codebases, clients, and countries. Trilingual (English, Russian, Hebrew).
+
+## About
+
+- Role: Senior Full-Stack Engineer, AI Integration
+- Core stack: TypeScript, React, Next.js, Node.js, C#/.NET
+- AI: OpenAI API, Anthropic API, LLM integration, AI agents, prompt engineering
+- Architecture: NX monorepo, module federation micro-frontends, Cloudflare Workers, Docker, MongoDB
+- Company: Greatwhale Solutions Ltd (independent contracting)
+
+## Links
+
+- Website: https://maxgertzen.com
+- GitHub: https://github.com/maxgertzen
+- LinkedIn: https://www.linkedin.com/in/maxgertzen/
+- Company: https://greatwhale.co
+
+## Contact
+
+Reach out via the contact form at https://maxgertzen.com for senior engineering roles or contract engagements.
