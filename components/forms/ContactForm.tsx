@@ -6,6 +6,7 @@ import { TextInput, TextArea, FormButton, FormCheckbox, Alert } from '@/componen
 import submitFormValues from '@/utils/submitForm';
 import Script from 'next/script';
 import { FormValues } from '@/types';
+import { RECAPTCHA_ACTION } from '@/constants/recaptcha';
 
 const ContactForm: React.FC = () => {
   const [showAlert, setShowAlert] = React.useState(false);
@@ -42,11 +43,13 @@ const ContactForm: React.FC = () => {
       return;
     }
 
-    // Promise keeps RHF's isSubmitting true across the detached grecaptcha.ready callback.
+    // Promise keeps RHF's isSubmitting true across the detached grecaptcha.enterprise.ready callback.
     return new Promise<void>((resolve) => {
       grecaptcha.enterprise.ready(async () => {
         try {
-          const token = await grecaptcha.enterprise.execute(siteKey, { action: 'submit' });
+          const token = await grecaptcha.enterprise.execute(siteKey, {
+            action: RECAPTCHA_ACTION,
+          });
           const formData = { ...data, recaptchaToken: token };
           await submitFormValues(formData);
           setShowAlert(true);

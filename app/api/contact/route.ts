@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { FormSubmission, FormValues } from '@/types';
 import xss from 'xss';
 import nodemailer from 'nodemailer';
+import { RECAPTCHA_ACTION } from '@/constants/recaptcha';
 
 // nodemailer needs the Node.js runtime; it cannot run on the edge.
 export const runtime = 'nodejs';
@@ -37,7 +38,6 @@ function checkRateLimit(ip: string): { allowed: boolean; retryAfterSec: number }
 // reCAPTCHA Enterprise assessment. Project id is taken from the Google Cloud
 // console (public, non-secret); only the API key lives in the environment.
 const RECAPTCHA_PROJECT = 'personal-website-1783424992246';
-const RECAPTCHA_ACTION = 'submit';
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
   const apiKey = process.env.RECAPTCHA_ENTERPRISE_API_KEY;
@@ -134,6 +134,13 @@ export async function POST(request: NextRequest) {
   const { name, email, message, phoneNumber, isAgreeingToTerms, recaptchaToken } =
     body;
 
+  if (!name || !email || !message || !isAgreeingToTerms || !recaptchaToken) {
+    return NextResponse.json(
+      { error: 'Missing required fields' },
+      { status: 400 }
+    );
+  }
+
   let isCaptchaValid: boolean;
   try {
     isCaptchaValid = await verifyRecaptcha(recaptchaToken);
@@ -147,13 +154,6 @@ export async function POST(request: NextRequest) {
   if (!isCaptchaValid) {
     return NextResponse.json(
       { error: 'reCAPTCHA verification failed' },
-      { status: 400 }
-    );
-  }
-
-  if (!name || !email || !message || !isAgreeingToTerms) {
-    return NextResponse.json(
-      { error: 'Missing required fields' },
       { status: 400 }
     );
   }
