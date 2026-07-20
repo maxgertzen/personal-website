@@ -617,6 +617,53 @@ html:not(.dark) .glass__shine {
     inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
+/* contact-form alert: liquid-glass card with a semantic colour tint */
+.glass-alert {
+  border-radius: 1rem;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  animation: alert-in 0.35s ease-out both;
+}
+
+.glass-alert__content {
+  position: relative;
+  z-index: 3;
+  padding: 0.85rem 1.15rem;
+}
+
+/* tint overrides sit after .glass__tint so equal-specificity source order wins */
+.glass-alert__tint--success {
+  background: rgba(16, 185, 129, 0.34);
+}
+
+.glass-alert__tint--error {
+  background: rgba(255, 45, 149, 0.34);
+}
+
+html:not(.dark) .glass-alert__tint--success {
+  background: rgba(16, 185, 129, 0.26);
+}
+
+html:not(.dark) .glass-alert__tint--error {
+  background: rgba(244, 63, 94, 0.22);
+}
+
+@keyframes alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-alert {
+    animation: none;
+  }
+}
+
 /* hero scroll cue fades out as soon as the page scrolls (before the sun rises) */
 .stage-scroller-fade {
   opacity: clamp(0, calc(1 - var(--g) * 12), 1);
