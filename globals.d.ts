@@ -14,7 +14,7 @@ interface ReCaptchaV3 {
 }
 
 declare global {
-  var grecaptcha: ReCaptchaV2 & ReCaptchaV3;
+  var grecaptcha: ReCaptchaV2 & ReCaptchaV3 & { enterprise: ReCaptchaV3 };
 }
 
 export {};

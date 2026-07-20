@@ -34,20 +34,27 @@ function checkRateLimit(ip: string): { allowed: boolean; retryAfterSec: number }
   return { allowed: true, retryAfterSec: 0 };
 }
 
-async function verifyRecaptcha(token: string): Promise<boolean> {
-  const secret = process.env.RECAPTCHA_SITE_SECRET;
+// reCAPTCHA Enterprise assessment. Project id is taken from the Google Cloud
+// console (public, non-secret); only the API key lives in the environment.
+const RECAPTCHA_PROJECT = 'personal-website-1783424992246';
+const RECAPTCHA_ACTION = 'submit';
 
-  const params = new URLSearchParams({
-    secret: secret || '',
-    response: token,
-  }).toString();
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  const apiKey = process.env.RECAPTCHA_ENTERPRISE_API_KEY;
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
+  if (!apiKey || !siteKey) {
+    throw new Error('reCAPTCHA Enterprise is not configured');
+  }
 
   const response = await fetch(
-    'https://www.google.com/recaptcha/api/siteverify',
+    `https://recaptchaenterprise.googleapis.com/v1/projects/${RECAPTCHA_PROJECT}/assessments?key=${apiKey}`,
     {
       method: 'POST',
-      body: params,
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: { token, expectedAction: RECAPTCHA_ACTION, siteKey },
+      }),
     }
   );
 
@@ -59,7 +66,11 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
 
   const data = await response.json();
 
-  return data.success && data.score >= 0.5;
+  return (
+    data.tokenProperties?.valid === true &&
+    data.tokenProperties?.action === RECAPTCHA_ACTION &&
+    (data.riskAnalysis?.score ?? 0) >= 0.5
+  );
 }
 
 const sendContactEmail = async (formValues: FormValues) => {
