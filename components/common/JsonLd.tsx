@@ -1,14 +1,13 @@
 export default function JsonLd() {
   const person = {
     '@type': 'Person',
+    '@id': 'https://maxgertzen.com/#person',
     name: 'Max Gertzen',
     jobTitle: 'Senior Full-Stack Engineer',
     url: 'https://maxgertzen.com',
     sameAs: [
       'https://github.com/maxgertzen',
       'https://www.linkedin.com/in/maxgertzen/',
-      'https://www.instagram.com/maxgertzen/',
-      'https://soundcloud.com/maxgertzen',
     ],
     knowsAbout: [
       'AI Integration',
@@ -107,9 +106,17 @@ export default function JsonLd() {
       'Max Gertzen - senior full-stack engineer building AI-integrated products: LLM apps, agent systems, and edge infrastructure in TypeScript, Node, and .NET.',
   };
 
+  const profilePage = {
+    '@type': 'ProfilePage',
+    '@id': 'https://maxgertzen.com/#profilepage',
+    url: 'https://maxgertzen.com',
+    name: 'Max Gertzen — Senior Full-Stack Engineer, AI Integration',
+    mainEntity: { '@id': 'https://maxgertzen.com/#person' },
+  };
+
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@graph': [person, organization, website],
+    '@graph': [profilePage, person, organization, website],
   };
 
   return (
