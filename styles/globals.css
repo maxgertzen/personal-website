@@ -396,6 +396,27 @@ main {
   opacity: calc((1 - var(--cool)) * 0.7);
 }
 
+/* Mobile: iOS evicts the backing store of the oversized grid layer (3D transform
+   + drop-shadow + blend) under memory pressure, so the grid blinks out mid-scroll.
+   Shrink the painted area and cut the expensive effects; desktop is untouched. */
+@media (max-width: 768px) {
+  .stage-grid {
+    left: -20%;
+    right: -20%;
+    height: 100svh;
+    backface-visibility: hidden;
+  }
+
+  .stage-grid--warm {
+    filter: none;
+  }
+
+  .stage-scan {
+    mix-blend-mode: normal;
+    opacity: calc((1 - var(--cool)) * 0.28);
+  }
+}
+
 /* word emphasis (wrap-safe, draws on when in view) */
 .emph {
   position: relative;
@@ -463,6 +484,14 @@ main {
   white-space: nowrap;
   will-change: transform;
   user-select: none;
+}
+
+/* drop the permanent layer promotion on mobile: one fewer composited layer
+   competing for iOS memory next to the grid (helps the grid stay painted) */
+@media (max-width: 768px) {
+  .mq-track {
+    will-change: auto;
+  }
 }
 
 .mq-chip {
@@ -567,9 +596,19 @@ html:not(.dark) .mq-chip {
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  -webkit-backdrop-filter: blur(2px) saturate(1.6);
-  backdrop-filter: blur(2px) saturate(1.6);
-  backdrop-filter: url(#glass-distortion) blur(2px) saturate(1.6);
+  /* guaranteed frosted fallback: WebKit/iOS drop SVG-filter backdrops, so a plain
+     blur must win the cascade there. Stronger blur so the frost reads on its own. */
+  -webkit-backdrop-filter: blur(7px) saturate(1.5);
+  backdrop-filter: blur(7px) saturate(1.5);
+}
+
+/* liquid refraction only where SVG-filter backdrops actually render. The Houdini
+   Paint API is Chromium-only, so this gates the distortion to Blink and lets
+   Safari/Firefox keep the plain-blur frost above (degrades safely both ways). */
+@supports (background: paint(id)) {
+  .glass__effect {
+    backdrop-filter: url(#glass-distortion) blur(2px) saturate(1.6);
+  }
 }
 
 .glass__tint {
@@ -609,6 +648,20 @@ html:not(.dark) .glass {
 
 html:not(.dark) .glass__tint {
   background: rgba(255, 255, 255, 0.55);
+}
+
+/* Safari/iOS won't blur a position:fixed backdrop, so the plain-blur frost never
+   materializes there — the sharp stage bleeds through and hurts legibility. Where
+   the SVG refraction is unavailable (non-Chromium), lean on a more opaque tint so
+   the card still reads as frosted glass. Chromium keeps its lighter tint + refraction. */
+@supports not (background: paint(id)) {
+  .glass__tint {
+    background: rgba(16, 16, 28, 0.64);
+  }
+
+  html:not(.dark) .glass__tint {
+    background: rgba(255, 255, 255, 0.74);
+  }
 }
 
 html:not(.dark) .glass__shine {
