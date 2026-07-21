@@ -2,11 +2,12 @@
 
 import { useEffect } from 'react';
 
-// scroll-progress (0..1) keyframes: when the sun rises and when warm→cool crossfades
-const SUN_START = 0.08;
-const SUN_RANGE = 0.14;
+// warm→cool crossfade as a fraction of total scroll (ambient, stays global)
 const COOL_START = 0.38;
 const COOL_RANGE = 0.3;
+// the sun completes its rise this far through the hero, so it always crests
+// within the hero regardless of document height (mobile docs are proportionally taller)
+const SUN_HERO_FRACTION = 0.55;
 
 export default function ScrollStage() {
   useEffect(() => {
@@ -26,11 +27,24 @@ export default function ScrollStage() {
     let prevSun = -1;
     let prevCool = -1;
 
+    // Frozen scroll denominator: on iOS the URL bar collapses on first scroll,
+    // changing window.innerHeight (and, via any vh-sized content, scrollHeight),
+    // which would move the progress denominator and make the stage jump. Cache
+    // the whole denominator and refresh only on width/orientation change.
+    let vw = window.innerWidth;
+    let maxScroll = 1;
+    let sunEnd = 1;
+    const measure = () => {
+      maxScroll = Math.max(1, root.scrollHeight - window.innerHeight);
+      const hero = document.getElementById('hero');
+      sunEnd = Math.max(1, (hero?.offsetHeight ?? window.innerHeight) * SUN_HERO_FRACTION);
+    };
+    measure();
+
     const tick = () => {
       ticking = false;
-      const max = root.scrollHeight - window.innerHeight;
-      const g = max > 0 ? clamp(window.scrollY / max) : 0;
-      sunMax = Math.max(sunMax, clamp((g - SUN_START) / SUN_RANGE));
+      const g = clamp(window.scrollY / maxScroll);
+      sunMax = Math.max(sunMax, clamp(window.scrollY / sunEnd));
       const cool = clamp((g - COOL_START) / COOL_RANGE);
       if (g !== prevG) {
         root.style.setProperty('--g', g.toFixed(4));
@@ -53,13 +67,20 @@ export default function ScrollStage() {
       }
     };
 
+    const onResize = () => {
+      if (window.innerWidth === vw) return; // ignore iOS toolbar height-only resizes
+      vw = window.innerWidth;
+      measure();
+      onScroll();
+    };
+
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
     tick();
 
     return () => {
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
