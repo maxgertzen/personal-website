@@ -7,20 +7,30 @@ interface AlertProps {
   onClose: () => void;
 }
 
-const variantStyles = {
-  success: 'bg-green-100 border-green-500 text-green-700',
-  error: 'bg-red-100 border-red-500 text-red-700',
+const tintClass: Record<AlertProps['variant'], string> = {
+  success: 'glass-alert__tint--success',
+  error: 'glass-alert__tint--error',
+};
+
+const textClass: Record<AlertProps['variant'], string> = {
+  success: 'text-emerald-950 dark:text-emerald-50',
+  error: 'text-rose-950 dark:text-rose-50',
 };
 
 const Alert: React.FC<AlertProps> = ({ variant, title, children, onClose }) => {
   return (
     <div
-      className={`${variantStyles[variant]} border-l-4 rounded-2xl p-4 animate__animated animate__fadeInUp absolute top-0 left-0 right-0 z-40`}
+      className="glass glass-alert absolute top-0 left-0 right-0 z-40 cursor-pointer"
       role="alert"
       onClick={onClose}
     >
-      <p className="font-bold">{title}</p>
-      {children}
+      <div className="glass__effect" />
+      <div className={`glass__tint ${tintClass[variant]}`} />
+      <div className="glass__shine" />
+      <div className={`glass-alert__content ${textClass[variant]}`}>
+        <p className="font-bold">{title}</p>
+        <div className="text-sm">{children}</div>
+      </div>
     </div>
   );
 };

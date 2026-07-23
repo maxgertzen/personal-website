@@ -3,11 +3,15 @@ export default function JsonLd() {
     '@type': 'Person',
     '@id': 'https://maxgertzen.com/#person',
     name: 'Max Gertzen',
-    jobTitle: 'Senior Full-Stack Engineer',
+    jobTitle: 'Senior Full-Stack Engineer, AI Integration',
+    description:
+      'Senior full-stack engineer specializing in AI integration — LLM apps, agent systems, and edge infrastructure in TypeScript, React, Node, and .NET. Works remotely, worldwide, and is location-flexible for senior and contract engagements.',
+    image: 'https://maxgertzen.com/opengraph-image',
     url: 'https://maxgertzen.com',
     sameAs: [
       'https://github.com/maxgertzen',
       'https://www.linkedin.com/in/maxgertzen/',
+      'https://theorg.com/org/chargeafter/org-chart/max-gertzen',
     ],
     knowsAbout: [
       'AI Integration',
@@ -46,8 +50,7 @@ export default function JsonLd() {
         '@type': 'Occupation',
         name: 'Senior Full-Stack Engineer',
         description:
-          'Front-end and back-end development for lender integrations on a multi-lender embedded/POS consumer financing platform. Played a key engineering role in an Angular to React migration; set up the NX monorepo and module-federation micro-frontend architecture now used across 30+ lender integrations. Builds LLM and agent systems on the OpenAI and Anthropic APIs.',
-        occupationLocation: { '@type': 'Country', name: 'Thailand' },
+          'Front-end and back-end development for lender integrations on a multi-lender embedded/POS consumer financing platform. Played a key engineering role in an Angular to React migration; set up the NX monorepo and module-federation micro-frontend architecture now used across 30+ lender integrations. Builds LLM and agent systems on the OpenAI and Anthropic APIs. Works remotely and is location-flexible.',
         skills:
           'React, NX, Module Federation, TypeScript, OpenAI API, Anthropic API, LLM Integration, .NET, C#, MongoDB, Azure, GCP, Docker',
       },
