@@ -149,16 +149,25 @@
 }
 
 
+/* The chevron pulse animates border-color (a plain repaint of a 32px element)
+   instead of opacity, which WebKit would force-composite: with no GPU layer per
+   chevron there is nothing to flash or corrupt on theme switch or scroll. The
+   implicit keyframe end resolves to the themed border color. */
 .arrow {
 	display: block;
 	width: 2rem;
 	height: 2rem;
 	margin: 0 0 3px 5px;
-	animation: mouse-scroll 1s infinite;
-	-webkit-animation: mouse-scroll 1s infinite;
-	-moz-animation: mouse-scroll 1s infinite;
+	animation: arrow-pulse 1s infinite;
 	border-right: 2px solid #000;
 	border-bottom: 2px solid #000;
+}
+
+@keyframes arrow-pulse {
+	from {
+		border-right-color: transparent;
+		border-bottom-color: transparent;
+	}
 }
 
 .arrow-down {
@@ -279,10 +288,7 @@
 :root {
   --stage-amber: hsl(var(--color-brand));
   --stage-magenta: #ff2d95;
-  --stage-hz: 60%;
-  --g: 0;
-  --sun: 0;
-  --cool: 0;
+  --scrolled: 0;
 }
 
 html {
@@ -301,17 +307,33 @@ main {
   z-index: 1;
 }
 
+/* The stage is fixed to the LIVE viewport (inset: 0) — on iOS the toolbar
+   collapse grows it at scroll-start. Everything positional inside is therefore
+   anchored to --stage-hz, which JS freezes as a PX value at load (fallback 60%),
+   so nothing slides when the stage itself resizes. Scroll only ever animates
+   transform and opacity (compositor-only); no property that triggers paint
+   (filter/background-position) is driven per-frame. */
 #scroll-stage {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  --stage-hz: 60%; /* horizon Y; JS freezes this as px (fallback: 60% of viewport) */
+  --stage-vh: 100%; /* frozen viewport height; JS freezes as px (fallback: 100% of stage) */
+  --g: 0;
+  --sun: 0;
+  --cool: 0;
 }
 
+/* Sky height is pinned to the frozen viewport plus slack to cover iOS toolbar
+   growth, so the gradient never stretches mid-scroll. */
 .stage-sky {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--stage-vh) + 20svh);
 }
 
 .stage-sky--warm {
@@ -324,45 +346,22 @@ main {
   opacity: var(--cool);
 }
 
-.stage-grid {
+/* The grid is drawn on a canvas (see ScrollStage.tsx): one viewport-sized
+   buffer, no DOM layer, no compositor tiles. A perspective-transformed DOM
+   layer here checkerboards on iOS (blank 512px tiles under GPU memory
+   pressure) — keep it canvas. JS sizes it to the frozen viewport + slack. */
+.stage-grid-canvas {
   position: absolute;
-  left: -55%;
-  right: -55%;
-  top: var(--stage-hz);
-  height: 130vh;
-  transform-origin: center top;
-  transform: perspective(340px) rotateX(calc(76deg - var(--g) * 52deg));
-}
-
-.stage-grid--warm {
-  background-image: linear-gradient(rgba(255, 45, 149, 0.85) 2px, transparent 2px),
-    linear-gradient(90deg, rgba(0, 229, 255, 0.7) 2px, transparent 2px);
-  background-size: 66px 66px;
-  background-position: 0 calc(var(--g) * -520px);
-  opacity: calc((1 - var(--cool)) * 0.95);
-  filter: drop-shadow(0 0 7px rgba(255, 45, 149, 0.5));
-}
-
-.stage-grid--cool {
-  background-image: linear-gradient(rgba(96, 165, 250, 0.6) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(96, 165, 250, 0.6) 1px, transparent 1px);
-  background-size: 54px 54px;
-  background-position: 0 calc(var(--g) * 280px);
-  opacity: calc(var(--cool) * 0.9);
-}
-
-.stage-horizon {
-  position: absolute;
+  top: 0;
   left: 0;
-  right: 0;
-  top: var(--stage-hz);
-  height: 3px;
-  z-index: 2;
-  background: linear-gradient(90deg, transparent, hsl(var(--color-brand) / 0.95), var(--stage-magenta), transparent);
-  filter: blur(calc(1px + var(--sun) * 7px));
-  opacity: calc((1 - var(--cool)) * (0.4 + var(--sun) * 0.6));
 }
 
+/* The horizon is where the canvas grid dissolves — there is no separate
+   horizon element (see ScrollStage.tsx). --sun-y is the shared vertical
+   position for the sun and its glow: it rises with --sun, then sinks back
+   below the horizon with --cool so the warm→cool morph reads as a sunset.
+   The sunwrap clips at the horizon (overflow:hidden), which is what makes the
+   sun visibly set. The % term resolves against each child's own height. */
 .stage-sunwrap {
   position: absolute;
   left: 0;
@@ -371,6 +370,9 @@ main {
   height: var(--stage-hz);
   overflow: hidden;
   z-index: 1;
+  --sun-y: calc(
+    (1 - var(--sun)) * 145% - var(--sun) * 11vh + var(--cool) * 145% + var(--cool) * 11vh
+  );
 }
 
 .stage-sun {
@@ -380,12 +382,26 @@ main {
   width: min(30vw, 220px);
   aspect-ratio: 1;
   border-radius: 50%;
-  opacity: calc(1 - var(--cool));
-  transform: translateX(-50%) translateY(calc((1 - var(--sun)) * 145% - var(--sun) * 11vh));
+  opacity: calc(1 - var(--cool) * 0.4); /* only dims slightly while setting — the clip hides it */
+  transform: translateX(-50%) translateY(var(--sun-y));
+  will-change: transform;
   background: linear-gradient(180deg, #ffe08a, var(--stage-amber) 42%, var(--stage-magenta));
   -webkit-mask-image: repeating-linear-gradient(180deg, #000 0 13px, transparent 13px 19px);
   mask-image: repeating-linear-gradient(180deg, #000 0 13px, transparent 13px 19px);
-  filter: drop-shadow(0 0 calc(16px + var(--sun) * 54px) hsl(var(--color-brand) / calc(0.12 + var(--sun) * 0.55)));
+}
+
+/* Sun glow as its own compositor-only layer — only opacity + transform animate
+   (a per-frame filter/drop-shadow here would repaint every frame). */
+.stage-sun-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(30vw, 220px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, hsl(var(--color-brand) / 0.5) 0%, hsl(var(--color-brand) / 0.18) 45%, transparent 70%);
+  opacity: calc((0.18 + var(--sun) * 0.82) * (1 - var(--cool)));
+  transform: translateX(-50%) translateY(var(--sun-y)) scale(calc(1.3 + var(--sun) * 0.8));
+  will-change: transform;
 }
 
 .stage-scan {
@@ -394,6 +410,14 @@ main {
   background: repeating-linear-gradient(180deg, transparent 0 2px, rgba(0, 0, 0, 0.32) 2px 4px);
   mix-blend-mode: overlay;
   opacity: calc((1 - var(--cool)) * 0.7);
+}
+
+/* Mobile: cheaper scanlines (blend modes are costly on iOS) */
+@media (max-width: 768px) {
+  .stage-scan {
+    mix-blend-mode: normal;
+    opacity: calc((1 - var(--cool)) * 0.28);
+  }
 }
 
 /* word emphasis (wrap-safe, draws on when in view) */
@@ -465,6 +489,14 @@ main {
   user-select: none;
 }
 
+/* drop the permanent layer promotion on mobile: one fewer composited layer
+   competing for iOS memory next to the grid (helps the grid stay painted) */
+@media (max-width: 768px) {
+  .mq-track {
+    will-change: auto;
+  }
+}
+
 .mq-chip {
   display: inline-flex;
   align-items: center;
@@ -521,19 +553,10 @@ html:not(.dark) .stage-sun {
   background: linear-gradient(180deg, #ffcf87, #ff8f5e 46%, #ff5f86);
 }
 
-html:not(.dark) .stage-horizon {
-  background: linear-gradient(90deg, transparent, rgba(255, 140, 60, 0.9), #ff5f86, transparent);
-}
-
-html:not(.dark) .stage-grid--warm {
-  background-image: linear-gradient(rgba(255, 90, 120, 0.55) 2px, transparent 2px),
-    linear-gradient(90deg, rgba(255, 140, 60, 0.5) 2px, transparent 2px);
-  filter: none;
-}
-
-html:not(.dark) .stage-grid--cool {
-  background-image: linear-gradient(rgba(37, 99, 235, 0.4) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, 0.4) 1px, transparent 1px);
+/* light theme: soft daylight — halve the glow blob (full-strength neon reads
+   as smears/washes on a cream background) */
+html:not(.dark) .stage-sun-glow {
+  background: radial-gradient(circle, rgba(255, 143, 94, 0.26) 0%, rgba(255, 143, 94, 0.09) 45%, transparent 70%);
 }
 
 html:not(.dark) .stage-scan {
@@ -567,9 +590,19 @@ html:not(.dark) .mq-chip {
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  -webkit-backdrop-filter: blur(2px) saturate(1.6);
-  backdrop-filter: blur(2px) saturate(1.6);
-  backdrop-filter: url(#glass-distortion) blur(2px) saturate(1.6);
+  /* guaranteed frosted fallback: WebKit/iOS drop SVG-filter backdrops, so a plain
+     blur must win the cascade there. Stronger blur so the frost reads on its own. */
+  -webkit-backdrop-filter: blur(7px) saturate(1.5);
+  backdrop-filter: blur(7px) saturate(1.5);
+}
+
+/* liquid refraction only where SVG-filter backdrops actually render. The Houdini
+   Paint API is Chromium-only, so this gates the distortion to Blink and lets
+   Safari/Firefox keep the plain-blur frost above (degrades safely both ways). */
+@supports (background: paint(id)) {
+  .glass__effect {
+    backdrop-filter: url(#glass-distortion) blur(2px) saturate(1.6);
+  }
 }
 
 .glass__tint {
@@ -611,21 +644,91 @@ html:not(.dark) .glass__tint {
   background: rgba(255, 255, 255, 0.55);
 }
 
+/* Safari/iOS won't blur a position:fixed backdrop, so the plain-blur frost never
+   materializes there — the sharp stage bleeds through and hurts legibility. Where
+   the SVG refraction is unavailable (non-Chromium), lean on a more opaque tint so
+   the card still reads as frosted glass. Chromium keeps its lighter tint + refraction. */
+@supports not (background: paint(id)) {
+  .glass__tint {
+    background: rgba(16, 16, 28, 0.64);
+  }
+
+  html:not(.dark) .glass__tint {
+    background: rgba(255, 255, 255, 0.74);
+  }
+}
+
 html:not(.dark) .glass__shine {
   box-shadow: inset 2px 2px 2px -1px rgba(255, 255, 255, 0.85),
     inset -1.5px -1.5px 2px -1px rgba(255, 255, 255, 0.6),
     inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
-/* hero scroll cue fades out as soon as the page scrolls (before the sun rises) */
-.stage-scroller-fade {
-  opacity: clamp(0, calc(1 - var(--g) * 12), 1);
-  transition: opacity 0.25s linear;
+/* contact-form alert: liquid-glass card with a semantic colour tint */
+.glass-alert {
+  border-radius: 1rem;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  animation: alert-in 0.35s ease-out both;
+}
+
+.glass-alert__content {
+  position: relative;
+  z-index: 3;
+  padding: 0.85rem 1.15rem;
+}
+
+/* tint overrides sit after .glass__tint so equal-specificity source order wins */
+.glass-alert__tint--success {
+  background: rgba(16, 185, 129, 0.34);
+}
+
+.glass-alert__tint--error {
+  background: rgba(255, 45, 149, 0.34);
+}
+
+html:not(.dark) .glass-alert__tint--success {
+  background: rgba(16, 185, 129, 0.26);
+}
+
+html:not(.dark) .glass-alert__tint--error {
+  background: rgba(244, 63, 94, 0.22);
+}
+
+@keyframes alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stage-grid,
-  .stage-sun {
+  .glass-alert {
+    animation: none;
+  }
+}
+
+/* hero scroll cue fades once the page scrolls; --scrolled is a binary flag set
+   on :root by ScrollStage, smoothed by the transition.
+   Deliberately NO will-change here: a permanently promoted layer over the
+   animated grid holds stale backing-store tiles on iOS — do not add one.
+   Tap-highlight off so a scroll gesture starting on the button doesn't paint
+   iOS's gray highlight square. */
+.stage-scroller-fade {
+  opacity: calc(1 - var(--scrolled, 0));
+  transition: opacity 0.25s linear;
+}
+
+.stage-scroller-fade button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-sun,
+  .stage-sun-glow {
     transform: none !important;
   }
 
