@@ -24,8 +24,8 @@ const About: React.FC = () => {
             useful. I work in React, TypeScript, and Node, run{' '}
             <Emphasis variant='underline'>my own</Emphasis> contracting company
             (Greatwhale Solutions), and move easily between codebases, clients,
-            and countries. I’m curious by default, trilingual by a good accident
-            of life (English, Russian, and Hebrew), and I care as much about{' '}
+            and countries. I’m curious, trilingual (English, Russian, Hebrew),
+            and I care as much about{' '}
             <Emphasis variant='highlight'>how a thing feels to use</Emphasis> as
             whether it runs. If you’re making something ambitious, I’d love to
             hear about it.
