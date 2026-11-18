@@ -48,10 +48,13 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
   }
 
   const response = await fetch(
-    `https://recaptchaenterprise.googleapis.com/v1/projects/${RECAPTCHA_PROJECT}/assessments?key=${apiKey}`,
+    `https://recaptchaenterprise.googleapis.com/v1/projects/${RECAPTCHA_PROJECT}/assessments`,
     {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
+      },
       body: JSON.stringify({
         event: { token, expectedAction: RECAPTCHA_ACTION, siteKey },
       }),
