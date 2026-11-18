@@ -50,7 +50,7 @@ export default function JsonLd() {
         '@type': 'Occupation',
         name: 'Senior Full-Stack Engineer',
         description:
-          'Front-end and back-end development for lender integrations on a multi-lender embedded/POS consumer financing platform. Played a key engineering role in an Angular to React migration; set up the NX monorepo and module-federation micro-frontend architecture now used across 30+ lender integrations. Builds LLM and agent systems on the OpenAI and Anthropic APIs. Works remotely and is location-flexible.',
+          'Front-end and back-end development for lender integrations on a multi-lender embedded/POS consumer financing platform. Builds LLM and agent systems on the OpenAI and Anthropic APIs. Works remotely and is location-flexible.',
         skills:
           'React, NX, Module Federation, TypeScript, OpenAI API, Anthropic API, LLM Integration, .NET, C#, MongoDB, Azure, GCP, Docker',
       },
