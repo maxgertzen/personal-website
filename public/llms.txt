@@ -16,9 +16,7 @@ Max Gertzen is a senior software engineer focused on AI-integrated product devel
 ## Experience
 
 - Senior Full-Stack Engineer at ChargeAfter (2021–present) — a multi-lender embedded/POS consumer-financing platform for the US market.
-  - Played a key engineering role migrating a legacy Angular monorepo to an NX-modular React architecture with module-federation micro-frontends.
-  - Authored the engineering guidelines now used by 4 teams across 30+ lender integrations, and shipped 20+ lender integrations end to end.
-  - Served as technical anchor for a team of ~10 engineers; extended backend services in .NET/C#.
+  - Front-end and back-end work on lender integrations, in React, TypeScript and .NET/C#.
 - Founder, Greatwhale Solutions Ltd — independent contracting for AI-integration and full-stack product work.
 - Selected work: provider-agnostic LLM classification libraries, multi-agent systems, and edge-deployed full-stack apps on Cloudflare Workers.
 
